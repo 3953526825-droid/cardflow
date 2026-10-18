@@ -394,10 +394,14 @@
   /* ===== 页面初始化 ===== */
   function appendLocalRow(container, item, onChanged) {
     const holder = document.createElement('div');
-    holder.innerHTML = '<a class="cfPick" href="#"><span class="cfPickName"></span><span class="cfPickGo" aria-hidden="true">→</span></a>';
+    holder.innerHTML = '<a class="cfPick" href="#"><span class="cfBadge" aria-hidden="true"></span><span class="cfPickText"><span class="cfPickName"></span><span class="cfPickSub"></span></span><span class="cfPickGo" aria-hidden="true">›</span></a>';
     const link = holder.firstChild;
-    const name = link.querySelector('.cfPickName');
-    name.textContent = item.name;
+    const pack = item.json || {};
+    link.querySelector('.cfPickName').textContent = item.name;
+    link.querySelector('.cfBadge').textContent = String(pack.subject || item.name || '制').slice(0, 1);
+    const sub = link.querySelector('.cfPickSub');
+    const subText = [pack.exam, pack.subject].filter(Boolean).join(' · ');
+    if (subText) sub.textContent = subText; else sub.remove();
     const row = document.createElement('div');
     row.className = 'packRow';
     row.dataset.id = item.id;

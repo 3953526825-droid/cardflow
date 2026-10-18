@@ -229,17 +229,37 @@ html[data-theme="dark"] dialog::backdrop {
   background: rgba(4, 8, 12, .66);
 }
 
-/* 学科选择页：白底卡片、齿轮、操作菜单与设置弹窗里的子元素
+/* 学科选择页：卡片、齿轮、徽标与操作菜单 / 设置弹窗里的子元素
    （这页的样式是离线壳内联生成的，加载顺序在 theme.css 之后，所以这里一律用 !important 压住） */
-html[data-theme="dark"] .cfPick,
+html[data-theme="dark"] body.cfPicker {
+  background:
+    radial-gradient(92% 46% at 100% 0%, rgba(38, 78, 132, .5) 0%, rgba(38, 78, 132, 0) 62%),
+    radial-gradient(80% 42% at 0% 104%, rgba(22, 80, 70, .38) 0%, rgba(22, 80, 70, 0) 60%),
+    #0d1520 !important;
+}
+html[data-theme="dark"] .cfPick {
+  background: linear-gradient(180deg, #16202d, #141c28) !important;
+  border-color: #263447 !important;
+  color: #e4edf8 !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 14px 26px -20px rgba(0, 0, 0, .9) !important;
+}
+html[data-theme="dark"] .cfPick:active { border-color: rgba(95, 157, 255, .6) !important; }
+html[data-theme="dark"] .cfBadge {
+  background: linear-gradient(145deg, #4b86e6, #2a5fbf 62%, #3c50c4) !important;
+  box-shadow: 0 8px 16px -8px rgba(0, 0, 0, .85), inset 0 1px 0 rgba(255, 255, 255, .18) !important;
+}
+html[data-theme="dark"] .cfBadgeMuted { background: linear-gradient(145deg, #5b6c82, #43505f) !important; }
+html[data-theme="dark"] .cfPickName { color: #e4edf8 !important; }
+html[data-theme="dark"] .cfPickSub { color: #8fa3ba !important; }
+html[data-theme="dark"] .cfPickHelp .cfPickName { color: #dfe9f5 !important; }
+html[data-theme="dark"] .cfPickGo { color: #7fb2ff !important; background: rgba(95, 157, 255, .16) !important; }
 html[data-theme="dark"] .cfGear {
   background: #16202d !important;
   border-color: #263447 !important;
-  color: #e4edf8 !important;
+  color: #cddff4 !important;
   box-shadow: none !important;
 }
-html[data-theme="dark"] .cfPickHelp .cfPickName { color: #dfe9f5 !important; }
-html[data-theme="dark"] .cfPickGo { color: #7fb2ff !important; }
+html[data-theme="dark"] h1 small { color: #8fa3ba !important; }
 html[data-theme="dark"] .cfTagline,
 html[data-theme="dark"] .cfEditorNote,
 html[data-theme="dark"] .cfSettings p { color: #8fa3ba !important; }

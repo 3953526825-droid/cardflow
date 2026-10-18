@@ -34,6 +34,11 @@ const SHARED_ORDER = ['render.js', 'parse.js', 'cards.js', 'prompt.js', 'generat
    只有学科选择页要用；它的 validate 会盖掉 CardFlowShared.validate（卡片格式校验），绝不能进卡片页。 */
 const EXTRA_SHARED = ['pack-schema.js'];
 
+/* 主题引导：在样式表之前把 data-theme 与页面底色定下来。
+   深色模式下从选择页点进学科页（或从学科页返回）时，WebView 会先铺一层默认白底、等 CSS 才上背景，
+   看着像白闪一下；这段内联脚本放在 <head> 最前，先把底色刷成主题色。判断口径与 theme.js 保持一致。 */
+const THEME_BOOT = '<script>try{var t=localStorage.getItem("cardflow.theme");if(t!=="dark"&&t!=="light")t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";var d=document.documentElement;d.setAttribute("data-theme",t);d.style.background=t==="dark"?"#0d1520":"#eef5fa";}catch(e){}</script>';
+
 /** 读一个学科包需要的「制卡信息」：离线页没有服务器，提示词与张数/深度选项都得内联进包里。 */
 function promptData(subjects) {
   const data = {};
@@ -101,9 +106,10 @@ function patchForOffline(html, subjects) {
       out = out.replace(anchor, "window.MathJax={paths:{'[tex]':'/vendor/mathjax/input/tex'},loader:");
     }
   }
+  // 跳页白闪：在 <head> 最前内联主题引导（见 THEME_BOOT），CSS 之前先把底色定下来
+  out = out.replace('<meta charset="utf-8">', '<meta charset="utf-8">' + THEME_BOOT);
   return hideDesktopOnly(out);
 }
-
 /**
  * 离线版没有「电脑开服务、手机走局域网访问」那一套（内网地址 / 访问口令 / AnkiConnect / AnkiWeb 同步），
  * 入口留着只会让人以为坏了或者以为有用。
@@ -147,46 +153,76 @@ function extraScripts() {
 
 /** 壳的入口页：离线选择学科（纯文字 + 线条图标，不用 emoji）。 */
 function pickerPage(subjects) {
+  // 学科行的小图标用「学科名首字」（学科包优先 use subject，如 生物→生）；选择页要跟 theme.css 的深色规则对齐
+  const esc = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
   const items = subjects.map(subject => {
     // 学科包行统一由 pack-import.js 接管（支持长按菜单与「改过的包」），非学科包走静态页
-    return `      <div class="packRow" data-id="${subject.id}" data-name="${subject.name}"${subject.pack ? ' data-pack="1"' : ''}>
+    const badge = esc((subject.subject || subject.name || '制').slice(0, 1));
+    const sub = esc([subject.exam, subject.subject].filter(Boolean).join(' · '));
+    return `      <div class="packRow" data-id="${subject.id}" data-name="${esc(subject.name)}"${subject.pack ? ' data-pack="1"' : ''}>
 `
       + `      <a class="cfPick" href="index-${subject.id}.html">
 `
-      + `        <span class="cfPickName">${subject.name}</span>
+      + `        <span class="cfBadge" aria-hidden="true">${badge}</span>
 `
-      + `        <span class="cfPickGo" aria-hidden="true">→</span>
+      + `        <span class="cfPickText">
+`
+      + `          <span class="cfPickName">${esc(subject.name)}</span>
+`
+      + (sub ? `          <span class="cfPickSub">${sub}</span>\n` : '')
+      + `        </span>
+`
+      + `        <span class="cfPickGo" aria-hidden="true">›</span>
 `
       + `      </a>\n      </div>`;
   }).join('\n');
-  return `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+  return `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">${THEME_BOOT}
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CardFlow 卡流</title>
 <style>
-  :root { color-scheme: light; }
-  body { margin: 0; padding: 28px 18px 40px; font-family: -apple-system, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
-         background: linear-gradient(160deg, #eef5fa 0%, #f6f9ff 55%, #eefaf4 100%); color: #17263d; }
-  .cfHead { display: flex; align-items: center; gap: 12px; margin: 0 0 22px; }
-  .cfLogo { display: block; }
-  h1 { font-size: 22px; margin: 0; letter-spacing: .5px; }
-  h1 small { font-size: 13px; font-weight: 400; color: #65758e; margin-left: 6px; }
-  .cfTagline { font-size: 13px; color: #65758e; margin-top: 4px; }
-  .cfPick { display: flex; align-items: center; justify-content: space-between; gap: 12px; text-decoration: none;
-            color: #17263d; background: rgba(255,255,255,.86); border: 1px solid rgba(161,185,221,.5);
-            border-radius: 14px; padding: 18px 18px; margin: 0 0 12px; box-shadow: 0 4px 14px rgba(23,58,112,.06); }
-  .cfPickName { font-size: 17px; font-weight: 600; }
-  .cfPickHelp { padding: 14px 18px; }
-  .cfPickHelp .cfPickName { font-size: 15px; font-weight: 500; color: #2a4a74; }
-  .cfPickGo { color: #2269d1; font-size: 18px; }
-  .cfNote { font-size: 12.5px; line-height: 1.7; color: #65758e; margin-top: 18px; }
+  :root { color-scheme: light; --pkBrand: #2269d1; --pkInk: #17263d; --pkMuted: #6a7d92; --pkLine: rgba(161,185,221,.5); }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; min-height: 100dvh; padding: 26px 18px 44px; font-family: -apple-system, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+         color: var(--pkInk); -webkit-font-smoothing: antialiased;
+         background: radial-gradient(92% 46% at 100% 0%, #dceaff 0%, rgba(220,234,255,0) 62%),
+                     radial-gradient(80% 42% at 0% 104%, #e2fbf0 0%, rgba(226,251,240,0) 60%),
+                     linear-gradient(160deg, #eef5fa 0%, #f6f9ff 55%, #eefaf4 100%); }
+  .cfHead { display: flex; align-items: center; gap: 13px; margin: 2px 2px 24px; }
+  .cfLogo { display: block; width: 52px; height: 52px; border-radius: 15px; box-shadow: 0 10px 22px -10px rgba(23,58,112,.6); }
+  h1 { font-size: 23px; margin: 0; letter-spacing: .3px; }
+  h1 small { font-size: 13px; font-weight: 400; color: var(--pkMuted); margin-left: 6px; }
+  .cfTagline { font-size: 12.5px; color: var(--pkMuted); margin-top: 4px; }
+  .cfPick { flex: 1; min-width: 0; display: flex; align-items: center; gap: 14px; min-height: 74px;
+            text-decoration: none; color: inherit; padding: 14px 16px;
+            background: linear-gradient(180deg, #ffffff, #fbfdff); border: 1px solid var(--pkLine);
+            border-radius: 18px; box-shadow: 0 1px 2px rgba(23,58,112,.04), 0 14px 26px -18px rgba(23,58,112,.42);
+            transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease; }
+  .cfPick:active { transform: scale(.984); border-color: rgba(34,105,209,.5);
+                   box-shadow: 0 1px 2px rgba(23,58,112,.06), 0 8px 18px -14px rgba(23,58,112,.6); }
+  .cfBadge { flex: none; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 14px;
+             color: #fff; font-size: 20px; font-weight: 700;
+             background: linear-gradient(145deg, #4f93f7, #2269d1 62%, #3a55d8);
+             box-shadow: 0 8px 16px -8px rgba(42,99,216,.9), inset 0 1px 0 rgba(255,255,255,.35); }
+  .cfBadgeMuted { background: linear-gradient(145deg, #93a8c4, #6b7f99); box-shadow: 0 8px 16px -10px rgba(60,80,110,.8); }
+  .cfPickText { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; }
+  .cfPickName { font-size: 17px; font-weight: 650; color: var(--pkInk);
+                overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .cfPickSub { font-size: 12.5px; color: var(--pkMuted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .cfPickGo { flex: none; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%;
+              color: var(--pkBrand); background: rgba(34,105,209,.1); font-size: 15px; font-weight: 700; }
+  .cfPickHelp { min-height: 0; }
+  .cfPickHelp .cfPickName { font-size: 14.5px; font-weight: 500; color: #3c5b7e; }
+  .cfNote { font-size: 12.5px; line-height: 1.7; color: var(--pkMuted); margin-top: 18px; }
   .cfNote b { color: #2a4a74; }
-  .box { background: rgba(255,255,255,.86); border: 1px solid rgba(161,185,221,.5); border-radius: 14px; padding: 14px 16px; margin: 0 0 14px; }
+  .box { background: rgba(255,255,255,.86); border: 1px solid var(--pkLine); border-radius: 14px; padding: 14px 16px; margin: 0 0 14px; }
   .box label { display: block; margin: 0 0 8px; }
   .box input[type=file] { font: inherit; max-width: 100%; }
-  .packRow { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; }
-  .packRow .cfPick { flex: 1; margin: 0; }
-  .cfGear { margin-left: auto; flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px;
-            border: 1px solid rgba(161,185,221,.6); background: rgba(255,255,255,.9); color: #496f8b; }
+  .packRow { display: flex; align-items: center; gap: 10px; margin: 0 0 11px; }
+  .packRow .cfPick { margin: 0; }
+  .cfGear { margin-left: auto; flex: none; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 13px;
+            border: 1px solid var(--pkLine); background: rgba(255,255,255,.9); color: #3f6a8c;
+            box-shadow: 0 6px 14px -8px rgba(23,58,112,.55); transition: transform .15s ease; }
+  .cfGear:active { transform: scale(.94); }
   /* 长按学科包弹出的操作菜单（编辑 / 复制 / 删除） */
   dialog.cfSheet { border: 0; border-radius: 18px 18px 0 0; padding: 6px 0 0; width: 100%; max-width: 100%;
                    margin: auto auto 0; background: #fff; color: #17263d; }
@@ -232,17 +268,17 @@ function pickerPage(subjects) {
   .ruleRow textarea { flex: 1; min-width: 0; font: inherit; padding: 8px; border: 1px solid #cadbe7; border-radius: 8px; }
 </style>  <link rel="stylesheet" href="/theme.css"><script src="/theme.js"></script>
 <style>
-.cfPackBox{margin:0 0 14px;border:1px dashed var(--cfLine,#cfd9e6);border-radius:12px;background:var(--cfPanel,rgba(255,255,255,.6));padding:0 12px 10px}
-.cfPackBox>summary{cursor:pointer;padding:12px 0;font-weight:600;color:var(--cfInk,#22303f);list-style:none;display:flex;align-items:center;gap:8px}
+.cfPackBox{margin:0 0 13px;border:1px dashed var(--cfLine,#cfd9e6);border-radius:16px;background:var(--cfPanel,rgba(255,255,255,.62));padding:0 14px 10px}
+.cfPackBox>summary{cursor:pointer;padding:14px 0;font-weight:600;color:var(--cfInk,#22303f);list-style:none;display:flex;align-items:center;gap:10px}
 .cfPackBox>summary::-webkit-details-marker{display:none}
-.cfPackBox>summary::before{content:"▸";font-size:12px;opacity:.6;transition:transform .15s ease}
-.cfPackBox[open]>summary::before{transform:rotate(90deg)}
+.cfPackBox>summary::before{content:"＋";display:grid;place-items:center;width:22px;height:22px;border-radius:7px;background:rgba(34,105,209,.12);color:#2269d1;font-size:14px;font-weight:700}
+.cfPackBox[open]>summary::before{content:"－"}
 .cfPackBox[open]{background:var(--cfPanel,transparent)}
 .cfPackMsg{margin-top:10px;font-size:13px;line-height:1.6;color:var(--cfMuted,#65758e);word-break:break-word}
 .cfPackMsg.isError{color:#c0392b;font-weight:600}
 .cfPackMsg.isOk{color:#1e8449}
 </style>
-</head><body>
+</head><body class="cfPicker">
 <main>
   <div class="cfHead">
     <img class="cfLogo" src="/icon-cardflow-192.png" alt="" width="48" height="48">
@@ -272,8 +308,12 @@ ${items}
   </div>
   <div id="packExtra"></div>
   <a class="cfPick cfPickHelp" href="guide.html">
-    <span class="cfPickName">新手使用说明（含常见问题）</span>
-    <span class="cfPickGo" aria-hidden="true">→</span>
+    <span class="cfBadge cfBadgeMuted" aria-hidden="true">?</span>
+    <span class="cfPickText">
+      <span class="cfPickName">新手使用说明</span>
+      <span class="cfPickSub">安装、导入与常见问题</span>
+    </span>
+    <span class="cfPickGo" aria-hidden="true">›</span>
   </a>
 </main>
 <script src="/core.js"></script>
@@ -300,7 +340,7 @@ function guidePage(subjects) {
     '注：联网检索通过检索服务商完成（默认 Tavily，也可以用自己的 Key）；卡片样式用你 AnkiDroid 里已有的笔记类型。',
     '导入失败时会自动改打包 .apkg 交给 AnkiDroid（点一次确认即可），并会在状态栏说明原因。'
   ].join('\n');
-  return `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+  return `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">${THEME_BOOT}
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CardFlow 使用说明</title>
 <style>
@@ -411,7 +451,7 @@ function buildShell(options = {}) {
   // 避开自己的学科包（比如自己写的文言文包）。
   const subjects = options.builtinOnly ? ALL_SUBJECTS.filter(subject => !subject.pack) : ALL_SUBJECTS;
   const skipped = ALL_SUBJECTS.filter(subject => !subjects.includes(subject));
-  if (skipped.length) console.log(`跳过的学科包：${skipped.map(subject => subject.id).join('、')}（--builtin-only 时只打自带的生物/化学）`);
+  if (skipped.length) console.log(`跳过的学科包：${skipped.map(subject => subject.id).join('、')}（--builtin-only 时只打框架自带的基准学科）`);
   fs.rmSync(out, { recursive: true, force: true });
   fs.mkdirSync(out, { recursive: true });
 
@@ -465,7 +505,7 @@ function buildShell(options = {}) {
   return { out, subjects: subjects.map(subject => subject.id), written };
 }
 
-module.exports = { buildShell, promptData, postprocessFile, DEFAULT_OUT, COPY_FILES, SHARED_ORDER, EXTRA_SHARED };
+module.exports = { buildShell, promptData, postprocessFile, pickerPage, guidePage, DEFAULT_OUT, COPY_FILES, SHARED_ORDER, EXTRA_SHARED };
 
 if (require.main === module) {
   const args = process.argv.slice(2);
