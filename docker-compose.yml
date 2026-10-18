@@ -1,0 +1,24 @@
+# 用法：
+#   1) 先准备配置：把 config/*.config.example.json 复制成 config/*.config.json，填好 token 与 apiKey
+#   2) docker compose up -d --build
+#   3) 浏览器打开 http://127.0.0.1:3210/
+#
+# ⚠️ 容器里连不到宿主机的 AnkiConnect：它只监听 127.0.0.1:8765（刻意的安全设计，别改动）。
+#    所以 Docker 版的「导入 Anki」用不了，请用界面上的「导出为文件」把 txt 导出，
+#    再拿到装了 Anki 的那台机器上导入。生成卡片、联网调研、导出都正常可用。
+services:
+  anki-card-maker:
+    build: .
+    image: anki-card-maker:latest
+    container_name: anki-card-maker
+    ports:
+      - "3210:3210"
+    volumes:
+      - ./config:/app/config      # 口令与密钥，只存在宿主机
+      - ./prompts:/app/prompts    # 改提示词不用重新 build
+      - ./subjects:/app/subjects  # 加学科不用重新 build
+    environment:
+      ANKI_HOST: 0.0.0.0
+      # 只有在你明确知道风险、并且把 AnkiConnect 改成监听 0.0.0.0 之后才打开下面这行：
+      # ANKI_URL: http://host.docker.internal:8765
+    restart: unless-stopped

@@ -1,0 +1,8 @@
+{
+  "token": "自己设一个访问口令（电脑和手机首次打开网页时输入，服务端用它校验请求头 x-anki-token）",
+  "apiUrl": "https://api.deepseek.com/v1",
+  "apiKey": "在这里填 AI 服务商的 API Key（OpenAI 兼容接口）",
+  "model": "deepseek-flash",
+  "tavilyKey": "在这里填 Tavily 的 API Key（可选，作为联网检索的兜底通道）",
+  "zhihuKey": "在这里填知乎开放平台的 Access Secret（可选，知乎站内/全网搜索）"
+}

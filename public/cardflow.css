@@ -1,0 +1,81 @@
+/* CardFlow: one static visual for all subjects; card preview selectors are intentionally untouched. */
+html:root[data-subject] { --ink:#17263d !important; --muted:#65758e !important; --brand:#2269d1 !important; --brand2:#5b80b5 !important; --line:rgba(161,185,221,.55) !important; --panel:rgba(255,255,255,.88) !important; }
+html[data-subject] body { background:linear-gradient(145deg,#eaf4fb 0%,#f4f6fa 54%,#edf6f3 100%) !important; background-attachment:scroll !important; }
+html[data-subject] body::before,html[data-subject] body::after { animation:none !important; display:none !important; }
+html[data-subject] h1 {color:#173a70 !important;}
+html[data-subject] h1::before {background:#368bb7 !important;}
+html[data-subject] .primaryAction {background:linear-gradient(120deg,#2269d1,#438ca8) !important;}
+html[data-subject] .box {background-color:rgba(255,255,255,.88) !important;}
+html[data-subject] .topStatus {background:#285d94 !important;}
+html[data-subject] .topStatus.error {background:#a33 !important;}
+html[data-subject] .topStatus.busy {background:#9a6700 !important;}
+@media (max-width:760px) { html[data-subject] .grid {grid-template-columns:1fr !important;} html[data-subject] button {white-space:normal !important;} }
+/* 学科工作区：只调整页面外壳与配置面板，不碰卡片预览及生成逻辑。 */
+html[data-subject] body { color:#172d48 !important; }
+html[data-subject] main { max-width:1120px !important; margin:0 auto 55px !important; padding:22px 22px 0 !important; }
+html[data-subject] .cfHeader { display:flex; justify-content:space-between; align-items:center; gap:18px; padding:8px 0 20px; }
+html[data-subject] .cfIdentity { display:flex; align-items:center; gap:12px; min-width:0; }
+html[data-subject] .cfBack { display:grid; place-items:center; flex:none; width:37px; height:37px; border-radius:11px; background:#fff; border:1px solid #d4e4ee; font-size:27px; line-height:1; color:#2269d1; text-decoration:none; }
+html[data-subject] .cfLogo { border-radius:11px; flex:none; width:47px; height:47px; box-shadow:0 6px 16px #214d7826; }
+html[data-subject] .cfHeader h1 { margin:0 !important; padding:0 !important; font-size:26px !important; line-height:1.1 !important; display:block !important; letter-spacing:-.03em !important; }
+html[data-subject] .cfHeader h1::before { display:none !important; }
+html[data-subject] .cfHeader h1 small { display:inline !important; font-size:12px !important; border:0 !important; box-shadow:none !important; padding:0 !important; margin-left:6px !important; background:none !important; color:#537694 !important; }
+html[data-subject] .cfTagline { color:#678198; font-size:12px; margin-top:5px; }
+html[data-subject] .cfSubject { min-width:0; max-width:52%; display:flex; flex-direction:column; gap:3px; text-align:right; }
+html[data-subject] .cfSubject strong { color:#1c5079; font-size:17px; }
+html[data-subject] .cfSubject span { color:#687f90; font-size:12px; line-height:1.5; overflow-wrap:anywhere; }
+html[data-subject] .box { border-radius:17px !important; border-color:#dce8ef !important; box-shadow:0 6px 24px #214d780e !important; }
+html[data-subject] .box > summary { color:#1f4a70 !important; font-weight:700 !important; }
+html[data-subject] #topStatus { border-radius:12px !important; box-shadow:0 4px 14px #23577a20 !important; }
+html[data-subject] #subjectSwitch { background-color:#f4f9fc; border-color:#cddfea; }
+html[data-subject] a:focus-visible,html[data-subject] button:focus-visible,html[data-subject] summary:focus-visible {outline:3px solid #67a3dd;outline-offset:2px;}
+@media(max-width:760px) {
+ html[data-subject] main {padding:14px 14px 28px !important;margin:0 auto !important;}
+ html[data-subject] .cfHeader {flex-wrap:wrap;gap:13px;padding:8px 2px 18px;}
+ html[data-subject] .cfHeader h1 {font-size:23px !important;}
+ html[data-subject] .cfLogo {width:42px;height:42px;}
+ html[data-subject] .cfSubject {max-width:none;width:100%;text-align:left;background:#fff;border:1px solid #dce8ef;border-radius:12px;padding:11px 15px;}
+ html[data-subject] .cfSubject strong {font-size:15px;}
+ html[data-subject] .cfSubject span {font-size:12px;}
+ html[data-subject] .box {margin:12px 0 !important;}
+}
+
+html[data-subject] .sourceFile{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;margin:8px 0;border:1px solid #d5e4ee;border-radius:10px;background:#f5f9fc;overflow-wrap:anywhere;}
+html[data-subject] .sourceFile button{flex:none;margin:0;}
+
+.queueControls{display:flex;gap:12px;flex-wrap:wrap}.queueControls label{flex:1;min-width:110px}.qualityWarning{color:#8c5716;background:#fff6e7;padding:9px;margin-top:8px;border-radius:8px}.sourceEvidence{font-size:12px;color:#61778c;overflow-wrap:anywhere;padding-top:10px}.occlusionFrame{position:relative;display:inline-block;max-width:100%}.occlusionFrame img{display:block;max-width:100%;height:auto}.occlusionMask{position:absolute;background:#3782c8;border:2px solid #fff}.occlusionFrame.revealed .occlusionMask{opacity:0}
+.occlusionFrame.editing{cursor:crosshair;touch-action:none;border:1px dashed #7fa8cc;border-radius:8px}
+.occlusionFrame.editing .occlusionMask{cursor:move;background:rgba(55,130,200,.35);border:1px dashed #fff;opacity:1}
+.occlusionHandle{position:absolute;right:-6px;bottom:-6px;width:12px;height:12px;border-radius:3px;background:#fff;border:1px solid #3782c8;cursor:nwse-resize}
+/* 编辑态每个遮挡框右上角的「×」删除按钮：手机 WebView 里双击不灵，点按删除（app.js 的 occlusionDelete） */
+.occlusionDelete{position:absolute;right:-9px;top:-9px;width:18px;height:18px;min-width:0;min-height:0;padding:0;border-radius:50%;background:#fff;border:1px solid #c25554;color:#c25554;font-size:12px;font-style:normal;font-weight:700;line-height:16px;text-align:center;cursor:pointer;z-index:2}
+.maskBar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0;font-size:12px;color:#61778c}
+.maskBar button{flex:none;margin:0}.occlusionFrame audio, audio{max-width:100%;margin:10px 0}
+
+.cardTypeChecks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:8px 0}.cardTypeChecks label,.inlineCheck{display:flex;align-items:center;gap:7px;padding:9px 11px;border:1px solid #d5e4ee;border-radius:9px;background:#f7fbfd}.cardTypeChecks input,.inlineCheck input{width:auto;min-width:0}.inlineCheck{margin:8px 0}#groupRule{margin:8px 0;width:100%}
+.groupExampleRow{display:flex;align-items:center;gap:10px;margin:8px 0;padding:8px 10px;border:1px solid #d5e4ee;border-radius:9px;background:#f7fbfd}.groupExampleRow img{width:56px;height:56px;object-fit:cover;border-radius:7px;border:1px solid #d5e4ee;flex:none}.groupExampleRow span{flex:1;font-size:12px;color:#61778c;overflow-wrap:anywhere}.groupExampleRow button{flex:none;margin:0}
+.groupExampleRow[hidden]{display:none}
+
+/* 低频设置收进小折叠块：默认一行，展开才占地方（手机上尤其明显） */
+.subBox{margin:8px 0;border:1px solid #d5e4ee;border-radius:10px;background:#f7fbfd;overflow:hidden}
+.subBox>summary{cursor:pointer;list-style:none;padding:10px 12px;font-weight:600;color:#2f5b93;display:flex;align-items:center;gap:8px}
+.subBox>summary::-webkit-details-marker{display:none}
+.subBox>summary::before{content:'';flex:none;width:0;height:0;border-left:6px solid #5b7fa8;border-top:4px solid transparent;border-bottom:4px solid transparent;transition:transform .15s}
+.subBox[open]>summary::before{transform:rotate(90deg)}
+.subBox>summary.inlineCheck{margin:0;border:0;border-radius:0;background:transparent;padding:10px 12px}
+.subBox>summary.inlineCheck input{width:auto;min-width:0}
+.subBox>*:not(summary){margin-left:12px;margin-right:12px}
+.subBox>*:not(summary):last-child{margin-bottom:12px}
+
+@media(max-width:760px) {
+ .subBox>summary{padding:9px 11px}
+ .cardTypeChecks{gap:6px;margin:6px 0}
+ .cardTypeChecks label{padding:8px 10px;font-size:13px}
+ /* 窄屏上让这两个输入框并排而不是各占一行（父容器的 display:flex 是行内样式，不好直接改） */
+ html[data-subject] #minCards,html[data-subject] #maxCards{flex:1;min-width:0}
+ html[data-subject] #model{flex:1;min-width:0}
+ html[data-subject] #loadModels{flex:none;margin:0}
+ /* 底部这几个动作按钮在窄屏上各占一行，看着整齐也好点中 */
+ html[data-subject] #checkAnki,html[data-subject] #changeToken,html[data-subject] #clearConfig{display:block;width:100%;margin:7px 0}
+ html[data-subject] .maskBar span{flex:1 1 100%}
+}

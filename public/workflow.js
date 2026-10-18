@@ -1,0 +1,18 @@
+/* 在现有制卡应用加载后接入任务队列，不自动调用模型。 */
+(function(){
+let task=null,done=new Set(),current=null,fingerprint='';
+function status(t){setStatus(t);}
+const host=document.getElementById('documentQueue');
+const e=id=>document.getElementById(id);
+function describe(){if(!task)return;e('queueInfo').textContent=task.name+' · '+task.count+(task.kind==='pdf'?' 页':' 段')+' · 已完成 '+done.size+' 批';e('queueEnd').max=task.count;e('queueStart').max=task.count;}
+function progressKey(){return 'cardflow.progress.'+SUBJECT.id+'.'+task.name+'.'+task.count+'.'+fingerprint;}
+function saveProgress(){try{localStorage.setItem(progressKey(),JSON.stringify({done:[...done],time:Date.now()}));}catch(_){}}
+function clearMaterials(){state.images.forEach(x=>{try{URL.revokeObjectURL(x.url);}catch(_){}});state.images=[];state.documents=[];state.batchSources=[];redrawImages();renderSourceFiles();}
+const oldAdd=addFiles;
+addFiles=async function(files){const docs=[...files].filter(f=>!f.type.startsWith('image/'));const pics=[...files].filter(f=>f.type.startsWith('image/'));if(!docs.length)return oldAdd(files);if(busy||state.readingFiles)return status('任务正在处理，请稍候。');if(docs.length>1)return status('大文档一次打开一份，完成后再打开下一份。');state.readingFiles=true;try{if(task&&!confirm('替换当前文档任务？已生成卡片仍在历史中。'))return;const next=await CardFlowFiles.open(docs[0]);if(task)await task.close();task=next;fingerprint=docs[0].size+'-'+docs[0].lastModified;current=null;e('queueMark').disabled=true;done=new Set();try{done=new Set(JSON.parse(localStorage.getItem(progressKey())||'{}').done||[]);}catch(_){}host.hidden=false;e('queueStart').value=1;e('queueEnd').value=Math.min(task.count,CardFlowCore.settings().batchSize);e('queueVisual').checked=CardFlowCore.settings().visual;describe();if(pics.length)addImages(pics);status('已建立文档任务。请检查页段、清晰度，点击「确认加载本批」；加载后再点生成。');}catch(err){status('打开失败：'+err.message);}finally{state.readingFiles=false;}};
+e('queueLoad').onclick=async()=>{if(!task||busy||state.readingFiles)return;const a=Number(e('queueStart').value),b=Number(e('queueEnd').value);const cap=Math.min(25,CardFlowCore.settings().batchSize);if(!Number.isInteger(a)||!Number.isInteger(b)||a<1||b<a||b>task.count||b-a>=cap)return status('页段无效：每批最多 '+cap+' 页（可在设置里调），请分批加载。');if((state.images.length||state.documents.length)&&!confirm('加载本批会替换页面里的图片与文字；未导入的卡片请先处理。继续？'))return;
+state.readingFiles=true;e('queueLoad').disabled=true;try{const batch=await task.read(a,b,imagePresetKey(),e('queueVisual').checked);clearMaterials();if(batch.text.trim())state.documents.push({name:task.name+' '+a+'–'+b,text:batch.text});state.batchSources=batch.sources;if(batch.images.length)addImages(batch.images);renderSourceFiles();current=a+'-'+b;e('queueMark').disabled=false;status('第 '+a+'–'+b+' 页已加载：'+batch.images.length+' 张页面图像、'+batch.text.length+' 字。请检查后点击生成；导入成功后标记本批完成。');}catch(err){status('加载失败：'+err.message);}finally{state.readingFiles=false;e('queueLoad').disabled=false;}};
+e('queueMark').onclick=()=>{if(!current||busy||state.readingFiles)return;if(!confirm('确认本批已检查并处理？此操作只记录进度，不会自动生成或导入卡片。'))return;done.add(current);saveProgress();describe();e('queueMark').disabled=true;const next=Number(current.split('-')[1])+1;if(next<=task.count){e('queueStart').value=next;e('queueEnd').value=Math.min(task.count,next+Math.min(25,CardFlowCore.settings().batchSize)-1);}status('已记本批完成。下一批已填好页码，仍需你确认加载与点击生成。');};
+e('queueClose').onclick=async()=>{if(busy||state.readingFiles)return;if(task)await task.close();task=null;host.hidden=true;clearMaterials();status('文档已关闭，进度记录保留在本机。');};
+window.CardFlowWorkflow={get task(){return task},get done(){return [...done]}};
+})();

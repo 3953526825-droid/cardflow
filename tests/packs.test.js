@@ -1,0 +1,50 @@
+'use strict';
+const test=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const {startServer,api}=require('./helpers/harness');
+const pack={schemaVersion:1,id:'kaoyan-physiology',exam:'考研',subject:'生理',name:'考研·生理',cardCount:{min:18,max:30},search:{subjectPrefix:'考研西医综合生理',catalogSuffix:'教材章节',preferredDomains:['edu.cn']},prompts:{generate:'围绕考试高频考点和易错题型制卡 {{$min}} {{$max}} {{$extra}} {{$weight}}，让考生在考场上答对。',reference:'仅纳入有据可查的考频与易错证据：{{$reference}}，不可偏离图片。',identify:'从图片识别考研西综生理章节与考点，不猜测没有出现的内容。',locate:'根据 {{$topic}} {{$keypoints}} {{$evidence}} 定位教材章节与考试考点。'}};
+test('CardFlow 学科包端到端：鉴权、严格校验、预览、导入、隔离、导出与删除',async()=>{
+  const server=await startServer({multi:true,configs:{demo:{token:'demo-token-12345678'}}});
+  const request=(url,o={})=>api(server.base,url,{token:'demo-token-12345678',...o});
+  try{
+    const root=await fetch(server.base+'/');assert.match(await root.text(),/CardFlow/);
+    assert.equal((await api(server.base,'/api/packs')).status,401);
+    assert.equal((await api(server.base,'/api/packs',{token:'wrong-token-12345678'})).status,401);
+    assert.equal((await request('/api/packs/validate',{method:'POST',body:{...pack,httpPort:8765}})).status,400);
+    assert.equal((await request('/api/packs/validate',{method:'POST',body:{...pack,id:'../evil'}})).status,400);
+    assert.equal((await request('/api/packs/validate',{method:'POST',body:pack})).status,200);
+    const created=await request('/api/packs/import',{method:'POST',body:pack});assert.equal(created.status,200,created.text);
+    assert.ok(fs.existsSync(path.join(server.dir,'packs',pack.id+'.json')));
+    const listing=await request('/api/packs');assert.equal(listing.json.packs.length,2);
+    assert.equal((await request('/api/packs/import',{method:'POST',body:pack})).status,400);
+    const html=await (await fetch(server.base+'/'+pack.id+'/')).text();
+    assert.match(html,/考研·生理/);assert.match(html,/id="generate"/);assert.match(html,/cardflow.css/);
+    assert.ok(!html.includes('高中考试里'));
+    assert.equal((await api(server.base,'/'+pack.id+'/api/config',{token:'wrong-token-12345678'})).status,401);
+    assert.equal((await api(server.base,'/'+pack.id+'/api/config',{token:'demo-token-12345678'})).status,200);
+    const exported=await request('/api/packs/export?id='+pack.id);assert.deepEqual(exported.json,pack);
+    assert.equal((await request('/api/packs/validate?edit='+pack.id,{method:'POST',body:{...pack,id:'changed-id'}})).status,400);
+    assert.equal((await request('/api/packs/update',{method:'POST',body:{...pack,id:'demo'}})).status,400);
+    const updated={...pack,name:'考研·生理（修订）',cardCount:{min:20,max:32}};
+    assert.equal((await request('/api/packs/validate?edit='+pack.id,{method:'POST',body:updated})).status,200);
+    assert.equal((await request('/api/packs/update',{method:'POST',body:updated})).status,200);
+    assert.deepEqual((await request('/api/packs/export?id='+pack.id)).json,updated);
+    assert.match(await (await fetch(server.base+'/'+pack.id+'/')).text(),/考研·生理（修订）/);
+    const backupDir=path.join(server.dir,'pack-backups');
+    assert.ok(fs.readdirSync(backupDir).some(name=>name.startsWith(pack.id+'-') && name.endsWith('.bak')));
+    assert.equal((await request('/api/packs/delete',{method:'POST',body:{id:'demo'}})).status,400);
+    assert.equal((await request('/api/packs/delete',{method:'POST',body:{id:pack.id}})).status,200);
+    assert.equal((await request('/api/packs')).json.packs.length,1);
+    assert.equal((await fetch(server.base+'/'+pack.id+'/')).status,404);
+  }finally{await server.stop()}
+});
+test('CardFlow 的静态视觉只调整背景与品牌，不改原有卡片预览样式',()=>{
+ const css=fs.readFileSync(path.join(__dirname,'..','public','cardflow.css'),'utf8');
+ assert.match(css,/animation:none/);assert.match(css,/background-attachment:scroll/);
+ assert.doesNotMatch(css,/\.card\b|\.note\b|\.cardTitle\b/);
+ assert.match(css,/grid-template-columns:1fr/);
+ const sw=fs.readFileSync(path.join(__dirname,'..','public','sw.js'),'utf8');
+ assert.match(sw,/url\.pathname\.includes\('\/api\/'\)/,'根 scope 不得缓存 /demo/api/');
+});

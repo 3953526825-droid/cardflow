@@ -1,0 +1,11 @@
+{
+  "name": "cardflow",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CardFlow 卡流：备考科目包驱动的拍照制卡平台",
+  "scripts": {
+    "start": "node src/server.js",
+    "start:demo": "node src/server.js --subject=demo",
+    "test": "node --test \"tests/**/*.test.js\""
+  }
+}

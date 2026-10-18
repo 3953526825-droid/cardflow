@@ -1,0 +1,31 @@
+{
+  "name": "CardFlow",
+  "short_name": "{{subject.shortName}}",
+  "description": "拍照 → 卡片 → Anki",
+  "start_url": "{{subject.base}}",
+  "scope": "{{subject.base}}",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "{{manifest.backgroundColor}}",
+  "theme_color": "#2269d1",
+  "icons": [
+    {
+      "src": "icon-cardflow-192.png?v={{subject.iconVersion}}",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-{{subject.id}}-512.png?v={{subject.iconVersion}}",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-{{subject.id}}-512.png?v={{subject.iconVersion}}",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

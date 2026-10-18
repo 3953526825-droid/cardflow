@@ -1,0 +1,58 @@
+/* CardFlow 学科包首页：静态背景、无装饰动画，兼顾窄屏触控。 */
+:root{font:16px/1.5 "Segoe UI","Microsoft YaHei",sans-serif;color:#172d48;background:#edf4f8;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;min-height:100dvh;background:linear-gradient(155deg,#e9f4fb 0%,#f5f7fb 54%,#eaf5f0 100%)}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+button:disabled{cursor:not-allowed;opacity:.48}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #68a6dd;outline-offset:3px}
+.page{max-width:900px;margin:auto;padding:clamp(20px,5vw,52px) clamp(16px,4vw,36px) 48px}
+.hero{display:flex;align-items:center;gap:20px;padding:0 2px 36px}
+.heroMark{width:72px;height:72px;flex:none;border-radius:19px;box-shadow:0 10px 25px #2b749d30;border:1px solid #ffffffb3}
+.heroCopy{min-width:0}
+.eyebrow{margin:0 0 3px;color:#40728b;font-size:12px;letter-spacing:.15em;font-weight:700}
+h1{font-size:clamp(27px,5vw,36px);line-height:1.12;letter-spacing:-.04em;margin:0;color:#173b67}
+h1 small{font-size:15px;letter-spacing:0;color:#5b758f;font-weight:550;margin-left:9px}
+.tagline{font-size:14px;color:#526b80;margin:9px 0 0}
+.sectionHead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:0 0 16px}
+.sectionHead h2{font-size:19px;letter-spacing:-.02em;margin:0;color:#1a3656}
+.sectionHead p{margin:0;color:#65798d;font-size:13px}
+.packList{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.packList li{min-width:0;border:1px solid #d9e6ee;background:#fff;border-radius:17px;box-shadow:0 6px 22px #2447600d;overflow:hidden}
+.packList li:hover{border-color:#91b8d1;box-shadow:0 9px 28px #24476019}
+.packLink{display:flex;align-items:center;gap:14px;min-height:104px;padding:20px;color:inherit;text-decoration:none}
+.packIcon{width:44px;height:44px;flex:none;border:1px solid #dceaf5;border-radius:12px;background:#e9f3fb;display:grid;place-items:center;color:#286aab;font-size:17px;font-weight:760;letter-spacing:.01em}
+.packText{display:flex;flex-direction:column;min-width:0;gap:4px;flex:1}
+.packText b{font-size:17px;color:#1b385b;overflow-wrap:anywhere;line-height:1.25}
+.packText span{font-size:13px;color:#697e90;overflow-wrap:anywhere}
+.packArrow{font-size:23px;color:#6b94af;font-weight:300;flex:none}
+.packTools{border-top:1px solid #edf1f4;display:flex;justify-content:flex-end;gap:10px;padding:10px 14px}
+.packTools button{background:#f5f9fc;color:#2b597b;border:1px solid #e0eaf0;border-radius:8px;padding:7px 12px;font-size:13px;min-height:38px}
+.packTools [data-delete]{color:#a0414a;background:#fff8f8}
+.manager{margin-top:28px;background:#fff;border:1px solid #d9e6ee;border-radius:18px;box-shadow:0 6px 22px #2447600d;overflow:hidden}
+.manager>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:14px;min-height:76px;padding:18px 22px}
+.manager>summary::-webkit-details-marker{display:none}
+.managerIcon{display:grid;place-items:center;width:39px;height:39px;flex:none;color:#2a74b1;background:#ecf5fb;border-radius:11px;font-size:24px;font-weight:350}
+.managerTitle{display:block;font-size:16px;font-weight:700;color:#1e3e60}
+.managerHint{display:block;margin-top:3px;font-size:12px;color:#687f91}
+.managerChevron{margin-left:auto;color:#7893aa;transition:transform .2s}
+.manager[open] .managerChevron{transform:rotate(90deg)}
+.managerInner{border-top:1px solid #e7eef3;padding:22px}
+.helper{font-size:13px;line-height:1.7;color:#5e7689;margin:0 0 20px}
+.fieldLabel{display:block;font-size:13px;font-weight:600;color:#385574;margin:18px 0 8px}
+.manager input[type=password],.manager textarea{display:block;width:100%;border:1px solid #cfdee9;background:#f9fcfe;border-radius:11px;padding:12px;color:#1c334e}
+.manager input[type=password]{min-height:46px}
+.manager textarea{min-height:160px;resize:vertical;line-height:1.6}
+.fileRow{display:flex;gap:14px;align-items:center;margin-top:14px;flex-wrap:wrap}
+.fileRow input{font-size:13px;max-width:100%;color:#587086}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 0}
+.actions button{border-radius:10px;border:1px solid #bed1e0;color:#265a82;background:#f4f9fd;padding:10px 16px;min-height:44px;font-size:14px;font-weight:600}
+.actions .primary{border-color:#2269d1;background:#2269d1;color:white}
+.actions button:hover:not(:disabled){filter:brightness(.96)}
+#packStatus{white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.7 "Segoe UI","Microsoft YaHei",sans-serif;color:#385574;background:#f4f8fb;border-radius:10px;margin:18px 0 0;padding:14px}
+#packStatus:empty{display:none}
+.footer{margin:24px 0 0;color:#718598;font-size:12px;line-height:1.7;text-align:center}
+@media(max-width:600px){.page{padding:24px 16px 38px}.hero{padding:0 3px 29px;gap:15px}.heroMark{width:57px;height:57px;border-radius:15px}.eyebrow{font-size:11px}.sectionHead{display:block;margin-bottom:14px}.sectionHead p{margin-top:3px}.packList{grid-template-columns:minmax(0,1fr);gap:12px}.packLink{min-height:86px;padding:15px 16px}.packIcon{width:40px;height:40px}.manager{margin-top:22px}.manager>summary{padding:15px 17px}.managerInner{padding:18px 16px}.actions button{flex:1 1 auto}.actions .primary{flex-basis:100%}.footer{text-align:left}}
+@media(max-width:360px){h1{font-size:25px}h1 small{font-size:13px}.packText b{font-size:16px}}
+
+.hero{position:relative;padding-right:48px}.settingsTrigger{position:absolute;right:0;top:12px;display:grid;place-items:center;width:40px;height:40px;background:#ffffffb0;border:1px solid #d5e3ec;border-radius:12px;color:#496f8b}.cfSettings{border:1px solid #d9e6ee;border-radius:18px;width:min(560px,94vw);max-height:85vh;padding:24px;color:#203b56}.cfSettings::backdrop{background:#17334f55}.cfSettings label{display:block;margin:15px 0}.cfSettings input:not([type=checkbox]),.cfSettings select{display:block;width:100%;padding:10px;border:1px solid #cadbe7;border-radius:8px}.ruleRow{display:flex;gap:8px;align-items:center;margin:9px 0}.ruleRow textarea{flex:1;min-width:0}.cfSettings p{font-size:13px;color:#627b90}

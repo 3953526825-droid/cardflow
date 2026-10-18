@@ -1,0 +1,79 @@
+{
+  "id": "demo",
+  "name": "通用制卡",
+  "shortName": "CardFlow",
+  "httpPort": 3210,
+  "httpsPort": 3212,
+  "configFile": "config/demo.config.json",
+  "promptFile": "prompts/demo.md",
+  "jsonParsing": "strict",
+  "postprocess": null,
+  "previewNormalizes": false,
+  "assetVersion": "demo1",
+  "storageKey": "cardflow.demo.v1",
+  "tokenKey": "cardflow.demo.token",
+  "themeColor": "#2269d1",
+  "viewportFit": true,
+  "manifest": {
+    "description": "资料截图 → Anki 卡片，直接导入本机 Anki。",
+    "backgroundColor": "#e9f3ff"
+  },
+  "cardCount": {
+    "min": 10,
+    "max": 20,
+    "label": "卡片总数",
+    "hint": "左为最少、右为最多。总张数不会超过上限；内容较少时可以少于最少值。",
+    "minAriaLabel": "最少卡片数",
+    "maxAriaLabel": "最多卡片数"
+  },
+  "cardMode": {
+    "field": "clozeWeight",
+    "controlId": "clozeWeight",
+    "promptVar": "weight",
+    "label": "填空卡优先级",
+    "hint": "定义、名词、精确数值仍使用普通卡；过程、因果、条件和关系优先填空卡。",
+    "default": "high",
+    "options": [
+      { "value": "high", "label": "高：优先用填空卡理解关系与过程", "prompt": "高" },
+      { "value": "very-high", "label": "很高：除纯记忆外尽量用填空卡", "prompt": "很高" },
+      { "value": "balanced", "label": "均衡：普通卡与填空卡按内容选择", "prompt": "均衡" }
+    ]
+  },
+  "copy": {
+    "title": "CardFlow",
+    "subtitle": "资料制卡 · 完整覆盖优先 · 关系与过程优先填空",
+    "extraRulesPlaceholder": "例如：重点生成概念对比卡；多增加图示关系的填空卡；暂不生成实验相关内容。",
+    "extraRulesHint": "可临时补充生成方向；自动保存，下次可继续修改或清空。",
+    "generateLabel": "生成 Anki 卡片",
+    "resultSummary": "检查、修改与导入",
+    "previewLabel": "预览卡片",
+    "newDeckPlaceholder": "新牌组名称，如 第一章",
+    "deckLevelExample": "课程::第一章",
+    "searchPlaceholder": "检索词，如 核心概念 高频考点 易错点",
+    "formatHelp": ""
+  },
+  "search": {
+    "subjectPrefix": "",
+    "catalogSuffix": "章节内容",
+    "preferredDomains": ["zhihu.com", "baike.baidu.com", "wenku.baidu.com", "edu.cn"]
+  },
+  "anki": {
+    "defaultDeck": "",
+    "defaultTags": []
+  },
+  "theme": {
+    "accent": "#2269d1",
+    "accentSoft": "#6d4ee8",
+    "ink": "#17263d",
+    "muted": "#65758e",
+    "line": "rgba(161,185,221,.55)",
+    "panel": "rgba(255,255,255,.82)",
+    "bgGradient": "linear-gradient(130deg,#e5f3ff 0%,#f5f2ff 47%,#e7fbf1 100%)",
+    "toastBg": "rgba(23,58,112,.95)",
+    "topStatusBg": "linear-gradient(95deg,rgba(27,112,194,.96),rgba(83,82,203,.94))",
+    "titleColor": "#173a70",
+    "sectionTitleColor": "#2f5b93",
+    "linkColor": "#2c6fc4",
+    "decoColors": ["#289ee2", "#5066df", "#30bea3"]
+  }
+}

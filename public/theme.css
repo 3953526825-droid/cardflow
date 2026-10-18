@@ -1,0 +1,442 @@
+/* 深色 / 浅色主题层：只覆盖变量与主要表面，不改布局，避免贴纸感 */
+
+/* 学科选择页 / 说明页自己用的几个变量（离线壳的页面直接引它们） */
+:root {
+  --cfInk: #22303f;
+  --cfLine: #cfd9e6;
+  --cfPanel: rgba(255, 255, 255, .6);
+  --cfMuted: #65758e;
+  --cfBrand: #2269d1;
+  /* 主题切换圆钮：自带一套颜色，不跟随各页面的 --line/--panel，两个页面才长得一模一样 */
+  --cfBtnBg: #ffffff;
+  --cfBtnLine: #cfd8e6;
+  --cfBtnInk: #65758e;
+  --cfBtnInkOn: #b8860b;
+  --cfBtnShadow: 0 4px 14px rgba(19, 39, 66, .12);
+}
+
+html[data-theme="dark"] {
+  --cfInk: #e4edf8;
+  --cfLine: #2c3c50;
+  --cfPanel: rgba(18, 26, 36, .72);
+  --cfMuted: #93a6bd;
+  --cfBrand: #5f9dff;
+  color-scheme: dark;
+  --ink: #e4edf8 !important;
+  --muted: #93a6bd !important;
+  --brand: #5f9dff !important;
+  --brand2: #86b4ff !important;
+  --line: rgba(120, 148, 184, .38) !important;
+  --panel: rgba(22, 32, 45, .92) !important;
+  --subject-ink: #e4edf8 !important;
+  --subject-muted: #93a6bd !important;
+  --subject-line: rgba(120, 148, 184, .38) !important;
+  --subject-panel: rgba(22, 32, 45, .92) !important;
+  --subject-accent: #5f9dff !important;
+  --subject-accent-soft: rgba(95, 157, 255, .16) !important;
+  --subject-toast-bg: rgba(16, 24, 34, .96) !important;
+  --cfBtnBg: #1b2734;
+  --cfBtnLine: #33404f;
+  --cfBtnInk: #dfe9f5;
+  --cfBtnShadow: 0 4px 14px rgba(0, 0, 0, .32);
+  background: #0d1520 !important;
+}
+
+html[data-theme="dark"] body {
+  background: #0d1520 !important;
+  color: var(--ink) !important;
+}
+
+/* 卡片 / 面板 / 折叠块 */
+html[data-theme="dark"] .box,
+html[data-theme="dark"] .panel,
+html[data-theme="dark"] .tokenCard,
+html[data-theme="dark"] .card,
+html[data-theme="dark"] details,
+html[data-theme="dark"] .thumb,
+html[data-theme="dark"] .cfItem,
+html[data-theme="dark"] #resultBox,
+html[data-theme="dark"] #deckTree,
+html[data-theme="dark"] .pickItem {
+  background: #16202d !important;
+  border-color: #263447 !important;
+  color: var(--ink) !important;
+}
+
+/* 面板的白边高光在深色下会变成一圈亮框 */
+html[data-theme="dark"] .box { box-shadow: none !important; }
+/* 卡片预览左侧的品牌色竖条留着 */
+html[data-theme="dark"] .card { border-left-color: #4c74dc !important; }
+
+/* 状态条：默认/成功那条本来是 #285d94 蓝底，深色下改成深灰（忙碌/失败仍有颜色，保留语义） */
+html[data-theme="dark"][data-subject] .topStatus,
+html[data-theme="dark"][data-subject] .topStatus.ok,
+html[data-theme="dark"] #topStatus {
+  background: #2a3440 !important;
+  background-image: none !important;
+  color: #dfe9f5 !important;
+  border: 1px solid #33404f !important;
+  box-shadow: none !important;
+}
+
+/* 「拍照」带 primaryAction，被 cardflow.css 的蓝色渐变 !important 压着，这里一并改成深灰 */
+html[data-theme="dark"][data-subject] .primaryAction,
+html[data-theme="dark"] #takePhoto {
+  background: #2a3440 !important;
+  background-image: none !important;
+  color: #e6eef8 !important;
+  border: 1px solid #33404f !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"][data-subject] .primaryAction:hover,
+html[data-theme="dark"] #takePhoto:hover {
+  background: #33404f !important;
+}
+
+/* ===== 卡片页（学科工作区）：白色条目一律改深灰 ===== */
+html[data-theme="dark"] .subBox,
+html[data-theme="dark"] .cardTypeChecks label,
+html[data-theme="dark"] .inlineCheck,
+html[data-theme="dark"] .groupExampleRow,
+html[data-theme="dark"] .sourceFile,
+html[data-theme="dark"] .tree,
+html[data-theme="dark"] .chosen,
+html[data-theme="dark"] .status,
+html[data-theme="dark"] .searchItem,
+html[data-theme="dark"] .deckNewPreview,
+html[data-theme="dark"] .formulaHelp,
+html[data-theme="dark"] .cfBack,
+html[data-theme="dark"] .cfSubject,
+html[data-theme="dark"] #historyBox {
+  background: #16202d !important;
+  border-color: #263447 !important;
+  color: #e4edf8 !important;
+}
+
+/* 公式说明块 */
+html[data-theme="dark"] .formulaHelp > div {
+  background: #16202d !important;
+  border-left-color: rgba(35, 156, 169, .5) !important;
+}
+html[data-theme="dark"] .formulaHelp > summary { color: #7fc4d4 !important; }
+
+/* 资料投放区是个浅色渐变，单独处理 */
+html[data-theme="dark"] .drop {
+  background: linear-gradient(120deg, #16202d, #1a2431) !important;
+  border-color: #2c3c50 !important;
+  color: #93a6bd !important;
+}
+html[data-theme="dark"] .drop:hover,
+html[data-theme="dark"] .drop.active {
+  background: linear-gradient(120deg, #1b2734, #22303f) !important;
+  border-color: #3b78da !important;
+}
+
+/* 历史记录层（整块是内联样式，必须 !important 才压得住） */
+html[data-theme="dark"] #historyBox { background: #0d1520 !important; }
+html[data-theme="dark"] #historyBox .searchItem { border-left-color: #4a86d8 !important; }
+
+/* 卡片页文字：浅底上的深色字在深色模式里要换成浅色字 */
+html[data-theme="dark"] .cfSubject strong { color: #e4edf8 !important; }
+html[data-theme="dark"] .cfSubject span,
+html[data-theme="dark"] .sourceEvidence,
+html[data-theme="dark"] .maskBar,
+html[data-theme="dark"] .groupExampleRow span,
+html[data-theme="dark"] #referenceInfo,
+html[data-theme="dark"] .searchItem .snip,
+html[data-theme="dark"] .card .note { color: #93a6bd !important; }
+html[data-theme="dark"] .box > summary,
+html[data-theme="dark"] .subBox > summary,
+html[data-theme="dark"] .sectionTitle { color: #9dc2f0 !important; }
+html[data-theme="dark"] .searchItem a,
+html[data-theme="dark"] .snipToggle { color: #7fb2ff !important; }
+html[data-theme="dark"] .leaf { color: #cfe0f2 !important; }
+html[data-theme="dark"] .leaf:hover,
+html[data-theme="dark"] .leaf.selected { background: #243447 !important; }
+html[data-theme="dark"] .qualityWarning { background: #3a2f1c !important; color: #f0c274 !important; }
+
+/* 顶部标题：与学科选择页同一套字（去掉原设计的白描边立体效果） */
+html[data-subject] h1,
+html[data-subject] .cfHeader h1 {
+  font-size: 22px !important;
+  letter-spacing: .5px !important;
+  color: #17263d !important;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+}
+html[data-subject] h1::before { content: none !important; display: none !important; }
+html[data-subject] h1 small {
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  color: #65758e !important;
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin-left: 6px !important;
+}
+html[data-theme="dark"][data-subject] h1 { color: #e4edf8 !important; }
+html[data-theme="dark"][data-subject] h1 small { color: #93a6bd !important; }
+
+/* 表单控件 */
+html[data-theme="dark"] input,
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] select {
+  background: #101a25 !important;
+  color: #e4edf8 !important;
+  border-color: #2a3a4d !important;
+}
+
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder {
+  color: #6d8099 !important;
+}
+
+/* 次要按钮：别让它们变成一片深色块 */
+html[data-theme="dark"] button,
+html[data-theme="dark"] .btnGhost {
+  background: #1b2734 !important;
+  color: #dfe9f5 !important;
+  border-color: #2c3c50 !important;
+}
+
+html[data-theme="dark"] button:hover {
+  background: #22303f !important;
+}
+
+/* 代码 / JSON 预览 */
+html[data-theme="dark"] pre,
+html[data-theme="dark"] code,
+html[data-theme="dark"] #json {
+  background: #0b131c !important;
+  color: #cfe0f2 !important;
+}
+
+html[data-theme="dark"] .muted,
+html[data-theme="dark"] small {
+  color: #8fa3ba !important;
+}
+
+/* 弹窗 */
+html[data-theme="dark"] dialog {
+  background: #16202d !important;
+  color: var(--ink) !important;
+  border-color: #263447 !important;
+}
+
+html[data-theme="dark"] dialog::backdrop {
+  background: rgba(4, 8, 12, .66);
+}
+
+/* 学科选择页：白底卡片、齿轮、操作菜单与设置弹窗里的子元素
+   （这页的样式是离线壳内联生成的，加载顺序在 theme.css 之后，所以这里一律用 !important 压住） */
+html[data-theme="dark"] .cfPick,
+html[data-theme="dark"] .cfGear {
+  background: #16202d !important;
+  border-color: #263447 !important;
+  color: #e4edf8 !important;
+  box-shadow: none !important;
+}
+html[data-theme="dark"] .cfPickHelp .cfPickName { color: #dfe9f5 !important; }
+html[data-theme="dark"] .cfPickGo { color: #7fb2ff !important; }
+html[data-theme="dark"] .cfTagline,
+html[data-theme="dark"] .cfEditorNote,
+html[data-theme="dark"] .cfSettings p { color: #8fa3ba !important; }
+html[data-theme="dark"] .cfPackItem { border-top-color: #22303f !important; }
+html[data-theme="dark"] .cfPackMsg.isError { color: #ff8a80 !important; }
+html[data-theme="dark"] .cfPackMsg.isOk { color: #5fd08a !important; }
+html[data-theme="dark"] .cfPacks h3,
+html[data-theme="dark"] .cfEditorRow h2 { color: #7fb2ff !important; }
+html[data-theme="dark"] dialog.cfSheet h2 { color: #7fb2ff !important; }
+html[data-theme="dark"] dialog.cfSheet button {
+  background: #16202d !important;
+  color: #e4edf8 !important;
+  border-top-color: #22303f !important;
+}
+html[data-theme="dark"] dialog.cfSheet button.cancel { color: #8fa3ba !important; border-top-color: #22303f !important; }
+html[data-theme="dark"] dialog.cfEditor textarea,
+html[data-theme="dark"] .cfSettings input:not([type=checkbox]),
+html[data-theme="dark"] .cfSettings select {
+  background: #101a25 !important;
+  color: #e4edf8 !important;
+  border-color: #2a3a4d !important;
+}
+html[data-theme="dark"] .cfEditorRow button.danger {
+  background: #3a2124 !important;
+  color: #ffb3ab !important;
+  border-color: #5c3335 !important;
+}
+
+/* 使用说明页：主按钮保持品牌色，其余跟随主题 */
+html[data-theme="dark"] body.cfGuide { background: #0d1520 !important; }
+html[data-theme="dark"] .cfGuide h2 { color: #9dc2f0 !important; }
+html[data-theme="dark"] .cfGuide button,
+html[data-theme="dark"] .cfGuide a.btn {
+  background: #2269d1 !important;
+  color: #fff !important;
+  border-color: #2269d1 !important;
+}
+html[data-theme="dark"] .cfGuide button.secondary,
+html[data-theme="dark"] .cfGuide a.btn.secondary {
+  background: #1b2734 !important;
+  color: #cfe0f2 !important;
+  border-color: #2c3c50 !important;
+}
+
+/* 主题切换按钮：自带颜色与尺寸，两页（学科选择页 / 学科卡片页）完全一致。
+   各页的 button 规则（min-height、padding、蓝底渐变等）都不能影响它，所以一律 !important。 */
+#cfThemeBtn {
+  position: fixed;
+  left: 14px;
+  bottom: 18px;
+  z-index: 40;
+  box-sizing: border-box !important;
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 1px solid var(--cfBtnLine) !important;
+  border-radius: 50% !important;
+  background: var(--cfBtnBg) !important;
+  background-image: none !important;
+  color: var(--cfBtnInk) !important;
+  box-shadow: var(--cfBtnShadow) !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  display: grid !important;
+  place-items: center !important;
+  cursor: pointer;
+  opacity: .72;
+  transition: opacity .15s ease, transform .15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#cfThemeBtn:hover,
+#cfThemeBtn:active {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+#cfThemeBtn[data-mode="dark"] {
+  color: #ffd479 !important;
+}
+
+/* 深度思考勾选：与上面的卡片类型列表视觉上分开一点 */
+.cfDeep {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: var(--muted, #65758e);
+}
+
+.cfDeep input {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+/* 手机上不要挡住正中间的操作区 */
+@media (max-width: 760px) {
+  #cfThemeBtn {
+    width: 34px !important;
+    height: 34px !important;
+    left: 10px;
+    bottom: 14px;
+    font-size: 14px !important;
+  }
+}
+
+/* ===== 真机反馈补丁 ===== */
+
+/* 1) 预览卡片的勾选框：基础页给所有 input 设了 min-height:42px，
+    会把复选框撑成一个占满半行的大蓝块。这里压回正常大小（两种主题都要）。 */
+.cardPick {
+  width: 18px !important;
+  height: 18px !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  margin: 0 2px 0 0 !important;
+  padding: 0 !important;
+  flex: 0 0 auto !important;
+  accent-color: #4c74dc;
+}
+/* 同类复选框（卡片类型 / 自动分层 / 深度思考 / 自动同步）一并压回来 */
+html[data-subject] .cardTypeChecks input[type="checkbox"],
+html[data-subject] .inlineCheck input[type="checkbox"],
+html[data-subject] .cfDeep input[type="checkbox"],
+html[data-subject] #deepThinking,
+html[data-subject] #autoGroup,
+html[data-subject] #queueVisual,
+html[data-subject] #autoSync {
+  width: 18px !important;
+  height: 18px !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  padding: 0 !important;
+  flex: 0 0 auto !important;
+}
+
+/* 2) 深色下「选择牌组」面板与「导入牌组」(#selectedDeck.chosen) 统一配色 ——
+    之前牌组树是另一套色，深色里几乎看不见。 */
+html[data-theme="dark"] #deckBox > summary,
+html[data-theme="dark"] .deckNew > details > summary,
+html[data-theme="dark"] .deckNewLabel { color: #9dc2f0 !important; }
+html[data-theme="dark"] .tree {
+  background: #16202d !important;
+  border-color: #263447 !important;
+}
+html[data-theme="dark"] .leaf {
+  color: #e4edf8 !important;
+  background: transparent !important;
+  border-color: transparent !important;
+}
+html[data-theme="dark"] .leaf:hover,
+html[data-theme="dark"] .leaf.selected {
+  background: #2d5da8 !important;
+  color: #ffffff !important;
+}
+
+/* 3) 深色下预览卡片正文用浅色字（卡片本体已是深灰，正文别再继承深色几乎看不见） */
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .card .cardQuestion,
+html[data-theme="dark"] .card .cardAnswer,
+html[data-theme="dark"] .card .cardTitle { color: #e4edf8 !important; }
+html[data-theme="dark"] .card hr { border-color: #33404f !important; }
+html[data-theme="dark"] .card .qualityWarning { color: #f0c274 !important; }
+
+/* 4) 深色下重试对照块（.cardCompare 的浅色底是 app.js 里的内联样式，必须 !important 压掉） */
+html[data-theme="dark"] .cardCompare {
+  background: #16202d !important;
+  border-color: #33404f !important;
+}
+html[data-theme="dark"] .cardCompare .cardIssue { color: #ff8a80 !important; }
+
+/* 5) 导入 / .apkg 确认弹层：整块是内联样式，深色下压成深灰面板 */
+html[data-theme="dark"] #exportGate > div {
+  background: #16202d !important;
+  color: #e4edf8 !important;
+  border: 1px solid #263447 !important;
+}
+/* 弹层默认隐藏：内联 display:flex 会压掉浏览器默认的 [hidden]{display:none}，
+   不加这条真机上弹层会一直挂着（真机实测踩到）。 */
+#exportGate[hidden] { display: none !important; }
+
+/* 6) 弹层里的类型勾选框：与 .cardPick 同一尺寸口径（基础页把 input 撑成 42px 高的大蓝块） */
+.exportType {
+  width: 18px !important;
+  height: 18px !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex: 0 0 auto !important;
+  accent-color: #4c74dc;
+}

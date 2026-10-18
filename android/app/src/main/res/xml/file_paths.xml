@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- 生成好的 .apkg 交给 AnkiDroid 打开 -->
+    <files-path name="apkg" path="apkg/" />
+    <!-- 直写时的媒体：先写进缓存目录，再把 content:// 交给 AnkiDroid 的媒体接口 -->
+    <cache-path name="media" path="media/" />
+</paths>

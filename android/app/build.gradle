@@ -1,0 +1,32 @@
+apply plugin: 'com.android.application'
+
+android {
+    namespace 'cn.cardflow.app'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'cn.cardflow.app'
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName '1.0'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+}
+
+dependencies {
+    // core：FileProvider（把 .apkg 交给 AnkiDroid 打开）
+    implementation 'androidx.core:core:1.13.1'
+    // webkit：WebViewAssetLoader（离线页从 assets 挂到 https 源，localStorage / Cookie 才可用）
+    implementation 'androidx.webkit:webkit:1.11.0'
+}

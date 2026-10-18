@@ -1,0 +1,1143 @@
+<!doctype html><html lang="zh-CN" data-subject="{{subject.id}}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1{{subject.viewportFit}}"><title>CardFlow · {{subject.name}}</title><link rel="manifest" href="{{subject.base}}manifest.json"><meta name="theme-color" content="#2269d1"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="CardFlow"><link rel="apple-touch-icon" href="{{subject.base}}apple-touch-icon.png?v={{subject.iconVersion}}"><link rel="icon" type="image/png" sizes="192x192" href="{{subject.base}}icon-cardflow-192.png?v=1"><link rel="shortcut icon" href="{{subject.base}}icon-cardflow-192.png?v=1"><style>
+/*
+ * 样式表（单学科模板；复制学科包时按自己的 data-subject 前缀重命名即可）
+ *
+ * 结构：⓪ 通用规则（不带作用域）
+ *       ① 主题调色板变量（纯声明，供以后改主题用；真实生效值仍由各学科 :root 决定）
+ *       ② 学科规则（作用域 html/body[data-subject="demo"]）
+ * 生成：node tests/tools/scope-css.js
+ * 说明：每个选择器只加了一段作用域前缀，声明、属性、值与源码顺序逐条原样保留；
+ *       规则顺序原样保留，层叠结果与参考文件一致。
+ */
+
+/* ===== ⓪ 通用规则：两个学科逐字相同，不带作用域 ===== */
+* {
+  box-sizing: border-box;
+}
+
+/* ===== ① 主题调色板变量：纯声明，供以后改主题用 ===== */
+html[data-subject="demo"] {
+  --subject-accent: #2269d1;
+  --subject-accent-soft: #6d4ee8;
+  --subject-ink: #17263d;
+  --subject-muted: #65758e;
+  --subject-line: rgba(161,185,221,.55);
+  --subject-panel: rgba(255,255,255,.82);
+  --subject-toast-bg: rgba(23,58,112,.95);
+}
+
+/* ===== 学科规则（作用域 demo）===== */
+html:root[data-subject="demo"] {
+  font: 15px Segoe UI,Microsoft YaHei,sans-serif;
+  color: #1f2d38;
+  background: #f3f6f8;
+}
+html:root[data-subject="demo"] {
+  --ink: #17263d;
+  --muted: #65758e;
+  --brand: #2269d1;
+  --brand2: #6d4ee8;
+  --line: rgba(161,185,221,.55);
+  --panel: rgba(255,255,255,.82);
+  font-size: 16px;
+}
+[data-subject="demo"] * {
+  box-sizing: border-box;
+}
+body[data-subject="demo"] {
+  margin: 0;
+}
+[data-subject="demo"] .muted {
+  color: #687986;
+  font-size: 13px;
+}
+[data-subject="demo"] .topStatus {
+  position: sticky;
+  top: 8px;
+  z-index: 10;
+  padding: 11px 16px;
+  margin: 0 0 12px;
+  border-radius: 9px;
+  background: #123c66;
+  color: #fff;
+  box-shadow: 0 3px 12px #123c6640;
+}
+[data-subject="demo"] .topStatus.busy {
+  background: #9a6700;
+}
+[data-subject="demo"] .topStatus.error {
+  background: #a33;
+}
+[data-subject="demo"] .topStatus.ok {
+  background: #1769aa;
+}
+body[data-subject="demo"] {
+  min-height: 100vh;
+  color: var(--ink);
+  background: linear-gradient(135deg,#edf6ff 0%,#f6f3ff 46%,#eefaf7 100%);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+body[data-subject="demo"]:before,body[data-subject="demo"]:after {
+  content: "";
+  position: fixed;
+  z-index: -2;
+  border-radius: 50%;
+  filter: blur(3px);
+  pointer-events: none;
+}
+[data-subject="demo"] main {
+  max-width: 1100px;
+  margin: 24px auto;
+  padding: 0 16px;
+  max-width: 1160px;
+  margin: 34px auto 48px;
+  padding: 0 18px;
+}
+[data-subject="demo"] h1:before {
+  content: "";
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin: 0 11px 3px 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg,#42c7bd,#3977dc);
+  box-shadow: 0 0 0 6px rgba(63,165,214,.12);
+}
+[data-subject="demo"] .sub {
+  color: #687986;
+  margin: 5px 0 18px;
+  max-width: 780px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #526781;
+}
+[data-subject="demo"] .topStatus {
+  border: 1px solid rgba(255,255,255,.75);
+  border-radius: 13px;
+  box-shadow: 0 8px 24px rgba(31,83,142,.16);
+  backdrop-filter: blur(13px);
+}
+[data-subject="demo"] main {
+  max-width: 1280px;
+  margin: 26px auto 54px;
+  padding: 0 26px;
+}
+[data-subject="demo"] h1 {
+  margin: 0;
+  font-size: clamp(29px,4vw,40px);
+  letter-spacing: -1.3px;
+  color: #173667;
+  text-shadow: 0 1px 0 #fff;
+  font-size: clamp(31px,3.2vw,43px);
+  line-height: 1.1;
+  margin-bottom: 7px;
+}
+[data-subject="demo"] h1 small {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 0;
+  margin-left: 9px;
+  padding: 5px 9px;
+  border-radius: 99px;
+  vertical-align: middle;
+  color: #4e6390;
+  background: rgba(232,240,255,.92);
+  border: 1px solid rgba(116,146,213,.22);
+}
+[data-subject="demo"] .sub {
+  font-size: 15px;
+  margin: 0 0 15px;
+}
+[data-subject="demo"] .topStatus {
+  max-width: none;
+  padding: 12px 18px;
+  margin-bottom: 14px;
+}
+[data-subject="demo"] .muted {
+  font-size: 12px;
+  line-height: 1.55;
+}
+body[data-subject="demo"]:before {
+  width: 58vmax;
+  height: 58vmax;
+  left: -24vmax;
+  top: -21vmax;
+  background: radial-gradient(circle at 58% 56%,rgba(72,143,235,.26) 0 2px,transparent 3px),radial-gradient(circle at 42% 45%,rgba(91,108,233,.17) 0 11%,transparent 12%),radial-gradient(circle,rgba(160,216,255,.36),rgba(106,106,232,.05) 55%,transparent 72%);
+  background-size: 42px 42px,260px 260px,100% 100%;
+  animation: cfDrift 22s ease-in-out infinite alternate;
+  opacity: .9;
+  filter: none;
+  background: radial-gradient(circle at 58% 56%,rgba(54,131,233,.32) 0 3px,transparent 4px),radial-gradient(circle at 42% 45%,rgba(92,102,227,.15) 0 14%,transparent 15%),radial-gradient(circle,rgba(129,202,255,.26),rgba(107,99,230,.06) 55%,transparent 72%);
+  z-index: -1;
+  opacity: .9;
+  filter: none;
+  left: -17vmax;
+  top: -16vmax;
+  width: 54vmax;
+  height: 54vmax;
+}
+body[data-subject="demo"]:after {
+  width: 52vmax;
+  height: 52vmax;
+  right: -20vmax;
+  bottom: -25vmax;
+  background: radial-gradient(circle at 50% 50%,rgba(66,201,159,.18) 0 10%,transparent 11%),radial-gradient(circle at 25% 25%,rgba(102,120,235,.14) 0 2px,transparent 3px),radial-gradient(circle,rgba(140,236,204,.20),transparent 68%);
+  background-size: 190px 190px,35px 35px,100% 100%;
+  animation: cfDrift 27s ease-in-out -9s infinite alternate;
+  opacity: .82;
+  filter: none;
+  z-index: -1;
+  opacity: .84;
+  filter: none;
+  right: -15vmax;
+  bottom: -20vmax;
+  width: 49vmax;
+  height: 49vmax;
+}
+[data-subject="demo"] main {
+  max-width: 1280px;
+  margin: 30px auto 58px;
+  padding: 0 24px;
+}
+[data-subject="demo"] h1 small {
+  font-size: 12px;
+  letter-spacing: .2px;
+  font-weight: 650;
+  background: rgba(57,113,211,.11);
+  color: #3868a9;
+  padding: 5px 9px;
+  border-radius: 99px;
+  text-shadow: none;
+}
+[data-subject="demo"] .sub {
+  font-size: 15px;
+  color: #526986;
+  margin: 0 0 17px;
+}
+[data-subject="demo"] .muted {
+  line-height: 1.55;
+}
+html[data-subject="demo"] {
+  min-height: 100%;
+  background: #e9f3ff;
+}
+body[data-subject="demo"] {
+  background: linear-gradient(125deg,#e9f4ff 0%,#f5f3ff 44%,#eaf9f4 100%);
+  background: radial-gradient(900px 520px at -8% -12%,rgba(91,170,255,.34),transparent 66%),radial-gradient(880px 540px at 108% 104%,rgba(81,210,175,.25),transparent 68%),linear-gradient(135deg,#eaf3ff 0%,#f5f3ff 48%,#edfbf5 100%);
+  min-height: 100vh;
+  position: relative;
+  isolation: isolate;
+  background: linear-gradient(130deg,#e5f3ff 0%,#f5f2ff 47%,#e7fbf1 100%);
+  overflow-x: hidden;
+}
+body[data-subject="demo"]:before,body[data-subject="demo"]:after {
+  z-index: 0 !important;
+  pointer-events: none;
+  filter: none !important;
+  opacity: 1 !important;
+}
+[data-subject="demo"] main {
+  position: relative;
+  z-index: 1;
+  max-width: 1240px;
+  margin: 36px auto 64px;
+  padding: 0 28px;
+}
+body[data-subject="demo"]:before {
+  content: "";
+  position: fixed !important;
+  inset: -90px auto auto -110px !important;
+  width: 590px !important;
+  height: 690px !important;
+  border-radius: 0 !important;
+  background: radial-gradient(circle at 27% 28%,rgba(40,158,226,.55) 0 5px,transparent 6px),radial-gradient(circle at 48% 44%,rgba(80,102,223,.30) 0 13px,transparent 14px),radial-gradient(circle at 71% 23%,rgba(48,190,163,.38) 0 8px,transparent 9px),radial-gradient(circle at 36% 67%,rgba(80,148,234,.24) 0 31px,transparent 32px),radial-gradient(ellipse at 43% 46%,rgba(94,187,241,.22) 0 31%,transparent 32%),linear-gradient(57deg,transparent 48%,rgba(75,133,222,.21) 49% 49.45%,transparent 50%),linear-gradient(123deg,transparent 49%,rgba(34,176,163,.18) 50% 50.4%,transparent 51%);
+  background-size: 130px 130px,180px 180px,155px 155px,260px 260px,440px 440px,185px 185px,220px 220px;
+  mask-image: radial-gradient(ellipse at 45% 45%,#000 0 47%,transparent 74%);
+  animation: cfCanvasFloat 19s ease-in-out infinite alternate !important;
+}
+body[data-subject="demo"]:after {
+  content: "";
+  position: fixed !important;
+  inset: auto -150px -135px auto !important;
+  width: 530px !important;
+  height: 560px !important;
+  border-radius: 0 !important;
+  background: radial-gradient(circle at 35% 37%,rgba(91,112,232,.24) 0 5px,transparent 6px),radial-gradient(circle at 61% 59%,rgba(45,193,157,.22) 0 7px,transparent 8px),radial-gradient(circle at 43% 68%,rgba(65,147,229,.14) 0 19px,transparent 20px),linear-gradient(30deg,transparent 49.55%,rgba(76,117,218,.10) 49.8% 50.1%,transparent 50.35%),linear-gradient(150deg,transparent 49.55%,rgba(39,178,160,.09) 49.8% 50.1%,transparent 50.35%);
+  background-size: 190px 190px,225px 225px,280px 280px,245px 245px,245px 245px;
+  mask-image: radial-gradient(ellipse at 58% 63%,#000 0 40%,transparent 71%);
+  animation: cfCanvasFloat 28s ease-in-out -8s infinite alternate-reverse !important;
+}
+[data-subject="demo"] .topStatus {
+  padding: 13px 17px;
+  margin: 0 0 15px;
+  background: linear-gradient(95deg,rgba(27,112,194,.96),rgba(83,82,203,.94));
+  color: #fff;
+  font-weight: 650;
+  letter-spacing: .1px;
+  box-shadow: 0 10px 22px rgba(37,96,177,.22);
+}
+[data-subject="demo"] h1 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: clamp(31px,3.2vw,43px);
+  line-height: 1.08;
+  margin: 0 0 8px;
+  color: #173a70 !important;
+}
+[data-subject="demo"] h1:before {
+  box-shadow: 0 0 0 7px rgba(61,173,218,.14) !important;
+}
+[data-subject="demo"] #status {
+  display: none !important;
+}
+[data-subject="demo"] h1 small {
+  display: none !important;
+}
+[data-subject="demo"] .box {
+  background: #fff;
+  border: 1px solid #d5dfe7;
+  border-radius: 10px;
+  margin: 12px 0;
+  overflow: hidden;
+}
+[data-subject="demo"] .grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+[data-subject="demo"] .card {
+  padding: 11px;
+  border-left: 4px solid #1769aa;
+  background: #f7fafc;
+  border-radius: 4px;
+}
+[data-subject="demo"] .cardTitle {
+  font-weight: 700;
+}
+[data-subject="demo"] .note {
+  font-size: 13px;
+  color: #5a6b80;
+}
+[data-subject="demo"] .box {
+  background: var(--panel);
+  border: 1px solid rgba(255,255,255,.85);
+  border-radius: 18px;
+  margin: 15px 0;
+  box-shadow: 0 14px 35px rgba(47,80,133,.10),inset 0 1px rgba(255,255,255,.75);
+  backdrop-filter: blur(13px);
+  transition: transform .2s ease,box-shadow .2s ease;
+}
+[data-subject="demo"] .box:hover {
+  box-shadow: 0 18px 42px rgba(47,80,133,.14),inset 0 1px rgba(255,255,255,.75);
+}
+[data-subject="demo"] .box>summary {
+  font-weight: 700;
+  cursor: pointer;
+  padding: 16px 20px;
+  padding: 17px 22px;
+  color: #233d68;
+  list-style: none;
+}
+[data-subject="demo"] .box>summary:before {
+  content: "⌄";
+  display: inline-block;
+  margin-right: 9px;
+  color: #3977dc;
+  transition: transform .2s;
+}
+[data-subject="demo"] .box[open]>summary:before {
+  transform: rotate(180deg);
+}
+[data-subject="demo"] .inside {
+  padding: 0 20px 20px;
+  padding: 0 22px 23px;
+}
+[data-subject="demo"] .grid {
+  gap: 28px;
+}
+[data-subject="demo"] .cards {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+  gap: 12px;
+}
+[data-subject="demo"] .card {
+  border: 1px solid rgba(178,204,232,.5);
+  border-left: 4px solid #4c74dc;
+  background: rgba(250,253,255,.88);
+  border-radius: 12px;
+  padding: 14px 16px;
+  box-shadow: 0 4px 12px rgba(50,91,146,.06);
+}
+[data-subject="demo"] .box {
+  border-radius: 20px;
+  margin: 14px 0;
+}
+[data-subject="demo"] .inside {
+  padding: 0 23px 22px;
+}
+[data-subject="demo"] .grid {
+  grid-template-columns: minmax(0,1.04fr) minmax(0,.96fr);
+  gap: 34px;
+}
+[data-subject="demo"] .grid>div>div[style*="display:flex"] {
+  align-items: stretch;
+}
+[data-subject="demo"] .grid>div>div[style*="display:flex"] button {
+  margin-top: 0;
+  min-width: 92px;
+}
+[data-subject="demo"] .card {
+  font-size: 15px;
+  line-height: 1.65;
+}
+[data-subject="demo"] .box>summary {
+  font-size: 16px;
+  padding: 16px 23px;
+  font-size: 16px;
+  padding: 18px 24px;
+  border-bottom: 1px solid transparent;
+}
+[data-subject="demo"] .box[open]>summary {
+  border-bottom-color: rgba(125,158,208,.18);
+}
+[data-subject="demo"] .inside {
+  padding: 5px 24px 25px;
+}
+[data-subject="demo"] .grid {
+  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  gap: 36px;
+}
+[data-subject="demo"] .grid>div+div {
+  padding-left: 30px;
+  border-left: 1px solid rgba(136,163,209,.22);
+}
+[data-subject="demo"] .cards .card {
+  font-size: 15px;
+  line-height: 1.68;
+}
+[data-subject="demo"] .grid div[style*="display:flex"]>select {
+  min-width: 0;
+  flex: 1;
+}
+[data-subject="demo"] .grid div[style*="display:flex"]>button {
+  flex: 0 0 auto;
+}
+[data-subject="demo"] .box {
+  border-radius: 20px;
+  margin: 16px 0;
+  background: linear-gradient(135deg,rgba(255,255,255,.91),rgba(251,253,255,.78));
+  box-shadow: 0 17px 40px rgba(42,79,140,.13),inset 0 1px rgba(255,255,255,.9);
+  background: linear-gradient(135deg,rgba(255,255,255,.94),rgba(249,252,255,.88)) !important;
+  border: 1px solid rgba(255,255,255,.96) !important;
+  box-shadow: 0 18px 45px rgba(42,77,138,.14),0 2px 6px rgba(42,77,138,.06) !important;
+}
+[data-subject="demo"] .box>summary {
+  background: linear-gradient(90deg,rgba(71,135,229,.085),rgba(83,202,173,.035));
+  letter-spacing: .15px;
+}
+[data-subject="demo"] .box>summary::marker {
+  color: #307ada;
+}
+[data-subject="demo"] .grid>div+div {
+  border-left-color: rgba(105,145,205,.28) !important;
+}
+[data-subject="demo"] .grid div:has(> #minCards)+.muted,[data-subject="demo"] .grid div:has(> #clozeWeight)+.muted,[data-subject="demo"] .grid div:has(> #extraRules)+.muted {
+  display: none;
+}
+[data-subject="demo"] .inside>button {
+  margin-top: 18px;
+}
+[data-subject="demo"] .box#resultBox:not([open]) {
+  box-shadow: 0 8px 21px rgba(42,77,138,.09) !important;
+}
+[data-subject="demo"] .box#resultBox:not([open])>summary {
+  color: #5e7190;
+}
+[data-subject="demo"] input,[data-subject="demo"] select,[data-subject="demo"] textarea,[data-subject="demo"] button {
+  font: inherit;
+  border: 1px solid #bdcbd5;
+  border-radius: 6px;
+  padding: 9px;
+}
+[data-subject="demo"] input,[data-subject="demo"] select,[data-subject="demo"] textarea {
+  width: 100%;
+}
+[data-subject="demo"] button {
+  background: #1769aa;
+  color: white;
+  border: 0;
+  cursor: pointer;
+  margin: 8px 8px 0 0;
+}
+[data-subject="demo"] .secondary {
+  background: #5d6e7b;
+}
+[data-subject="demo"] .danger {
+  background: #a33;
+}
+[data-subject="demo"] .chosen,[data-subject="demo"] .status {
+  padding: 10px;
+  margin-top: 8px;
+  border-radius: 6px;
+  background: #eef3f7;
+  overflow-wrap: anywhere;
+}
+[data-subject="demo"] .tree {
+  max-height: 300px;
+  overflow: auto;
+  border: 1px solid #c7d2da;
+  border-radius: 6px;
+  padding: 6px;
+  margin-top: 8px;
+}
+[data-subject="demo"] .tree details {
+  margin: 2px 0;
+}
+[data-subject="demo"] .leaf {
+  display: block;
+  width: 100%;
+  text-align: left;
+  color: #1f2d38;
+  background: transparent;
+  margin: 1px 0;
+}
+[data-subject="demo"] .leaf:hover,[data-subject="demo"] .leaf.selected {
+  background: #dcecf8;
+}
+[data-subject="demo"] .drop {
+  border: 2px dashed #85a6bd;
+  border-radius: 8px;
+  padding: 32px;
+  text-align: center;
+  background: #f8fbfd;
+  cursor: pointer;
+  margin-top: 8px;
+}
+[data-subject="demo"] .drop.active {
+  background: #e2f1fc;
+}
+[data-subject="demo"] .thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+[data-subject="demo"] .thumb {
+  position: relative;
+}
+[data-subject="demo"] .thumb img {
+  width: 130px;
+  height: 96px;
+  object-fit: cover;
+  border: 1px solid #bdcbd5;
+  border-radius: 6px;
+}
+[data-subject="demo"] .thumb button {
+  position: absolute;
+  right: -7px;
+  top: -8px;
+  border-radius: 50%;
+  padding: 1px 7px;
+  background: #a33;
+  margin: 0;
+}
+[data-subject="demo"] textarea {
+  min-height: 280px;
+  font: 13px Consolas,monospace;
+}
+[data-subject="demo"] .extraRules {
+  min-height: 82px;
+  font: 14px Segoe UI,Microsoft YaHei,sans-serif;
+}
+[data-subject="demo"] input,[data-subject="demo"] select,[data-subject="demo"] textarea {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(255,255,255,.78);
+  box-shadow: inset 0 1px 2px rgba(27,65,118,.04);
+  transition: border .18s,box-shadow .18s;
+}
+[data-subject="demo"] input:focus,[data-subject="demo"] select:focus,[data-subject="demo"] textarea:focus {
+  outline: 0;
+  border-color: #5d8fe1;
+  box-shadow: 0 0 0 4px rgba(74,132,226,.14);
+}
+[data-subject="demo"] button {
+  border-radius: 10px;
+  padding: 10px 14px;
+  background: linear-gradient(135deg,#2f71d7,#6552d8);
+  box-shadow: 0 5px 12px rgba(49,89,184,.20);
+  transition: transform .16s,box-shadow .16s,filter .16s;
+}
+[data-subject="demo"] button:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+  box-shadow: 0 8px 17px rgba(49,89,184,.26);
+}
+[data-subject="demo"] button:active {
+  transform: translateY(0);
+}
+[data-subject="demo"] .secondary {
+  background: linear-gradient(135deg,#60748d,#495e7a);
+}
+[data-subject="demo"] .danger {
+  background: linear-gradient(135deg,#cf5964,#aa3653);
+}
+[data-subject="demo"] .chosen,[data-subject="demo"] .status {
+  border: 1px solid rgba(107,146,208,.2);
+  background: linear-gradient(100deg,rgba(236,245,255,.92),rgba(245,241,255,.76));
+  border-radius: 10px;
+}
+[data-subject="demo"] .tree {
+  background: rgba(255,255,255,.72);
+  border-color: var(--line);
+  border-radius: 10px;
+}
+[data-subject="demo"] .tree summary {
+  cursor: pointer;
+  padding: 6px;
+  color: #405a7b;
+}
+[data-subject="demo"] .leaf {
+  border-radius: 7px;
+}
+[data-subject="demo"] .leaf:hover,[data-subject="demo"] .leaf.selected {
+  background: linear-gradient(90deg,#deecff,#eee8ff);
+}
+[data-subject="demo"] .drop {
+  border: 2px dashed rgba(61,123,210,.55);
+  border-radius: 16px;
+  padding: 37px;
+  background: linear-gradient(120deg,rgba(236,247,255,.8),rgba(245,242,255,.72));
+  color: #385675;
+  transition: all .2s;
+}
+[data-subject="demo"] .drop:hover,[data-subject="demo"] .drop.active {
+  border-color: #3b78da;
+  background: linear-gradient(120deg,rgba(220,241,255,.95),rgba(236,230,255,.88));
+  transform: translateY(-1px);
+}
+[data-subject="demo"] .thumb img {
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(45,73,112,.17);
+}
+[data-subject="demo"] textarea {
+  border-radius: 13px;
+  background: rgba(252,254,255,.85);
+}
+[data-subject="demo"] .chosen {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+[data-subject="demo"] .drop {
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 16px;
+}
+[data-subject="demo"] label {
+  display: block;
+  font-weight: 600;
+  margin: 10px 0 5px;
+  font-size: 13px;
+  letter-spacing: .15px;
+  color: #455b79;
+  margin-top: 15px;
+  font-size: 13px;
+  font-weight: 750;
+  color: #405d83;
+  margin: 16px 0 7px;
+}
+[data-subject="demo"] input,[data-subject="demo"] select,[data-subject="demo"] textarea {
+  font-size: 14px;
+  padding: 10px 11px;
+  min-height: 42px;
+  font-size: 14px;
+}
+[data-subject="demo"] textarea.extraRules {
+  min-height: 108px;
+}
+[data-subject="demo"] .tree {
+  max-height: 265px;
+  max-height: 270px;
+}
+[data-subject="demo"] .drop:before {
+  content: "✦";
+  display: block;
+  font-size: 25px;
+  color: #427bdb;
+  margin-bottom: 6px;
+  font-size: 30px;
+}
+[data-subject="demo"] button {
+  white-space: nowrap;
+  min-height: 40px;
+  padding: 9px 15px;
+  font-size: 14px;
+  white-space: nowrap;
+  min-height: 40px;
+  font-weight: 650;
+}
+[data-subject="demo"] .drop {
+  min-height: 145px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 15px;
+  background: linear-gradient(135deg,rgba(239,248,255,.96),rgba(244,251,248,.91)) !important;
+  border-color: #6fa9ec !important;
+}
+[data-subject="demo"] .drop:after {
+  content: "◌  概念 · 关系 · 过程";
+  display: block;
+  margin-top: 9px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: #5393ae;
+}
+[data-subject="demo"] .chosen {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  color: #354f79;
+  background: linear-gradient(90deg,#f0f5ff,#f8f5ff) !important;
+}
+[data-subject="demo"] .tokenGate {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+  background: linear-gradient(135deg,rgba(233,243,255,.95),rgba(245,242,255,.95));
+  backdrop-filter: blur(7px);
+}
+[data-subject="demo"] .tokenGate[hidden] {
+  display: none;
+}
+[data-subject="demo"] .tokenGate .tokenCard {
+  width: 100%;
+  max-width: 430px;
+  padding: 26px 24px;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 22px 55px rgba(42,77,138,.22);
+}
+[data-subject="demo"] .tokenGate h2 {
+  margin: 0 0 8px;
+  font-size: 21px;
+  color: #173a70;
+}
+[data-subject="demo"] .tokenGate input {
+  margin-top: 14px;
+}
+[data-subject="demo"] .tokenGate button {
+  width: 100%;
+  margin-top: 14px;
+}
+[data-subject="demo"] .tokenError {
+  min-height: 19px;
+  margin-top: 9px;
+  color: #a33;
+  font-size: 13px;
+  font-weight: 600;
+}
+[data-subject="demo"] .primaryAction {
+  background: linear-gradient(120deg,#2269d1,#35b5a0);
+}
+[data-subject="demo"] button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+[data-subject="demo"] #retry {
+  background: linear-gradient(120deg,#5d6e7b,#6b8ba3);
+}
+[data-subject="demo"] .deckNew {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed rgba(125,158,208,.5);
+}
+[data-subject="demo"] .deckNewLabel {
+  font-size: 13px;
+  font-weight: 750;
+  color: #405d83;
+  margin: 0;
+}
+[data-subject="demo"] .deckNew .chosen {
+  min-height: 40px;
+  font-size: 14px;
+}
+[data-subject="demo"] .deckNew>details>summary {
+  cursor: pointer;
+  padding: 6px 0;
+  font-weight: 600;
+}
+[data-subject="demo"] .deckNewRow {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+[data-subject="demo"] .deckNewRow>input {
+  flex: 1;
+  min-width: 0;
+}
+[data-subject="demo"] .deckNewRow>button {
+  flex: 0 0 auto;
+  margin: 0;
+  min-width: 76px;
+}
+[data-subject="demo"] .deckNewPreview {
+  font-size: 12px;
+  color: #5b7ba0;
+  min-height: 16px;
+  overflow-wrap: anywhere;
+}
+[data-subject="demo"] #deckDeleteInfo {
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.75;
+  white-space: pre-line;
+  color: #3f5b7d;
+  overflow-wrap: anywhere;
+}
+[data-subject="demo"] .searchRow {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+  margin-top: 10px;
+}
+[data-subject="demo"] .searchRow>input {
+  flex: 1;
+  min-width: 0;
+}
+[data-subject="demo"] .searchRow>button {
+  flex: 0 0 auto;
+  margin: 0;
+  min-width: 96px;
+}
+[data-subject="demo"] .searchResults {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+[data-subject="demo"] .searchItem {
+  padding: 10px 12px;
+  border-left: 3px solid #4a86d8;
+  background: rgba(240,246,255,.78);
+  border-radius: 5px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+[data-subject="demo"] .searchItem a {
+  color: #1c5fb0;
+  font-weight: 650;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+[data-subject="demo"] .searchItem .snip {
+  color: #4d6480;
+  margin: 5px 0 8px;
+  max-height: 88px;
+  overflow: hidden;
+}
+[data-subject="demo"] .searchItem button {
+  margin: 0;
+  min-height: 32px;
+  padding: 4px 11px;
+  font-size: 12px;
+}
+[data-subject="demo"] textarea.reference {
+  min-height: 130px;
+  font-size: 13px;
+}
+[data-subject="demo"] #referenceInfo {
+  font-size: 12px;
+  color: #5b7ba0;
+  align-self: center;
+}
+[data-subject="demo"] .toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(16px + env(safe-area-inset-bottom,0px));
+  transform: translateX(-50%) translateY(12px);
+  max-width: min(620px,92vw);
+  max-height: 44vh;
+  overflow: auto;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: rgba(23,58,112,.95);
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.55;
+  font-weight: 600;
+  box-shadow: 0 12px 32px rgba(20,50,100,.32);
+  z-index: 1200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease,transform .18s ease;
+  overflow-wrap: anywhere;
+}
+[data-subject="demo"] .toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+  cursor: pointer;
+}
+[data-subject="demo"] .toast.error {
+  background: rgba(163,51,51,.96);
+}
+[data-subject="demo"] .toast.warn {
+  background: rgba(173,110,20,.96);
+}
+[data-subject="demo"] .toast.busy {
+  background: rgba(40,72,130,.95);
+}
+[data-subject="demo"] .searchItem .snip.expanded {
+  max-height: none;
+  overflow: visible;
+}
+[data-subject="demo"] .snipToggle {
+  margin: 2px 0 7px;
+  font-size: 12px;
+  font-weight: 650;
+  color: #2c6fc4;
+  cursor: pointer;
+  user-select: none;
+}
+[data-subject="demo"] .snipToggle:hover {
+  text-decoration: underline;
+}
+[data-subject="demo"] .searchItem button+button {
+  margin-left: 8px;
+}
+[data-subject="demo"] .sectionTitle {
+  margin: 16px 0 6px;
+  font-size: 13px;
+  font-weight: 750;
+  color: #2f5b93;
+  letter-spacing: .3px;
+}
+@media(max-width:720px){
+  [data-subject="demo"] .grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media(max-width:760px){
+  [data-subject="demo"] main {
+    margin-top: 20px;
+    padding: 0 12px;
+  }
+  [data-subject="demo"] .grid {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+  [data-subject="demo"] .inside {
+    padding: 0 15px 17px;
+  }
+  [data-subject="demo"] .box>summary {
+    padding: 15px;
+  }
+  [data-subject="demo"] .topStatus {
+    top: 5px;
+  }
+  [data-subject="demo"] main {
+    padding: 0 12px;
+    margin-top: 16px;
+  }
+  [data-subject="demo"] h1 {
+    font-size: 30px;
+  }
+  [data-subject="demo"] .grid {
+    grid-template-columns: 1fr;
+  }
+  [data-subject="demo"] .grid>div>div[style*="display:flex"] button {
+    min-width: 0;
+    flex: 1 1 100px;
+  }
+  [data-subject="demo"] main {
+    padding: 0 14px;
+  }
+  [data-subject="demo"] .grid>div+div {
+    padding-left: 0;
+    border-left: 0;
+    border-top: 1px solid rgba(136,163,209,.22);
+    margin-top: 17px;
+  }
+  body[data-subject="demo"]:before {
+    transform: scale(.72) !important;
+    transform-origin: top left;
+  }
+  body[data-subject="demo"]:after {
+    transform: scale(.72) !important;
+    transform-origin: bottom right;
+  }
+  [data-subject="demo"] .grid>div>div[style*="display:flex"] {
+    flex-wrap: wrap;
+    flex-wrap: wrap;
+  }
+  [data-subject="demo"] .grid>div>div[style*="display:flex"]>select {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+  [data-subject="demo"] .grid>div>div[style*="display:flex"]>button {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+  [data-subject="demo"] input,[data-subject="demo"] select,[data-subject="demo"] textarea {
+    font-size: 16px;
+  }
+  [data-subject="demo"] main {
+    margin-top: 20px;
+    padding: 0 14px;
+    margin-top: 14px;
+    margin: 12px auto 36px;
+    padding: 0 10px;
+  }
+  [data-subject="demo"] h1 {
+    font-size: 25px;
+    line-height: 1.15;
+    margin-bottom: 6px;
+  }
+  [data-subject="demo"] h1:before {
+    width: 10px;
+    height: 10px;
+    margin: 0 8px 2px 0;
+    box-shadow: 0 0 0 5px rgba(61,173,218,.12);
+  }
+  [data-subject="demo"] .sub {
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 0 0 12px;
+  }
+  [data-subject="demo"] .topStatus {
+    font-size: 13px;
+    position: static;
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+  }
+  [data-subject="demo"] .box {
+    margin: 11px 0;
+    border-radius: 16px;
+  }
+  [data-subject="demo"] .box>summary {
+    padding: 16px;
+    padding: 13px 15px;
+    font-size: 15px;
+  }
+  [data-subject="demo"] .inside {
+    padding: 3px 16px 19px;
+    padding: 2px 15px 16px;
+  }
+  [data-subject="demo"] .grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px;
+  }
+  [data-subject="demo"] .grid>div+div {
+    padding-left: 0;
+    border-left: 0;
+    border-top: 1px solid rgba(136,163,209,.22);
+    margin-top: 14px;
+    padding-top: 14px;
+  }
+  [data-subject="demo"] label {
+    font-size: 13px;
+    margin: 12px 0 6px;
+  }
+  [data-subject="demo"] input,[data-subject="demo"] select,[data-subject="demo"] textarea {
+    font-size: 15px;
+    min-height: 40px;
+    padding: 9px 10px;
+  }
+  [data-subject="demo"] button {
+    white-space: normal;
+    line-height: 1.35;
+    padding: 9px 13px;
+  }
+  [data-subject="demo"] .inside>button {
+    width: 100%;
+    margin: 10px 0 0;
+    width: 100%;
+    margin: 10px 0 0;
+  }
+  [data-subject="demo"] .chosen {
+    min-height: 40px;
+    font-size: 14px;
+    padding: 8px 11px;
+  }
+  [data-subject="demo"] .tree {
+    max-height: 200px;
+  }
+  [data-subject="demo"] .drop {
+    min-height: 132px;
+    padding: 22px 12px;
+    min-height: 112px;
+    padding: 18px 10px;
+    font-size: 14px;
+  }
+  [data-subject="demo"] .drop:before {
+    font-size: 22px;
+  }
+  [data-subject="demo"] .thumbs {
+    gap: 8px;
+  }
+  [data-subject="demo"] .thumb img {
+    width: 108px;
+    height: 82px;
+    width: 88px;
+    height: 66px;
+  }
+  [data-subject="demo"] .searchRow {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  [data-subject="demo"] .searchRow>input {
+    flex: 1 1 100%;
+  }
+  [data-subject="demo"] .searchRow>button {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+  [data-subject="demo"] .deckNewRow>button {
+    min-width: 62px;
+  }
+  [data-subject="demo"] textarea {
+    min-height: 200px;
+  }
+  [data-subject="demo"] .searchItem {
+    font-size: 12.5px;
+    padding: 9px 10px;
+  }
+  [data-subject="demo"] .searchItem .snip {
+    max-height: 76px;
+  }
+  [data-subject="demo"] #deckDeleteInfo {
+    font-size: 12.5px;
+  }
+  [data-subject="demo"] .muted {
+    font-size: 12px;
+  }
+}
+@media(min-width:1060px){
+  [data-subject="demo"] #deckBox {
+    max-width: 94%;
+  }
+}
+
+</style><link rel="stylesheet" href="{{subject.base}}cardflow.css?v=2"><link rel="stylesheet" href="{{subject.base}}theme.css?v=1"><script src="{{subject.base}}theme.js?v=1"></script>{{#subject.previewNormalizes}}<script>window.MathJax={loader:{load:['[tex]/mhchem']},tex:{packages:{'[+]':['mhchem']},inlineMath:[['\\(','\\)']]},svg:{fontCache:'global'}};</script><script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>{{/subject.previewNormalizes}}<script src="{{subject.base}}vendor/pdf.min.js"></script><script src="{{subject.base}}vendor/mammoth.browser.min.js"></script><script src="{{subject.base}}core.js?v=1"></script><script src="{{subject.base}}files.js?v=3"></script></head><body data-subject="{{subject.id}}"><main><div id="tokenGate" class="tokenGate"><div class="tokenCard"><h2>请输入访问口令</h2><div class="muted">口令保存在这台电脑的 config.json 里；手机和电脑首次打开各输入一次即可。</div><input id="tokenInput" type="password" placeholder="访问口令" autocomplete="current-password"><button id="tokenSave">进入</button><div id="tokenError" class="tokenError"></div></div></div><div id="deckDeleteGate" class="tokenGate" hidden><div class="tokenCard"><h2>删除牌组</h2><div class="muted" id="deckDeleteInfo"></div><button id="deckDeleteConfirm" class="danger">确认删除（含卡片，不可恢复）</button><button id="deckDeleteCancel" class="secondary">取消</button></div></div><header class="cfHeader"><div class="cfIdentity"><a class="cfBack" href="/" aria-label="返回学科包列表">‹</a><img class="cfLogo" src="{{subject.base}}icon-cardflow-192.png" alt="" width="48" height="48"><div><h1>CardFlow <small>卡流</small></h1><div class="cfTagline">拍照 → 卡片 → Anki</div></div></div><div class="cfSubject"><strong>{{subject.name}}</strong><span>{{copy.subtitle}}</span></div></header>
+<div id="topStatus" class="topStatus">正在初始化……</div><details class="box" open><summary>配置与导入牌组</summary><div class="inside"><div class="grid"><div><details class="subBox" id="apiBox"><summary>接口设置（API 地址与 Key）</summary><label>AI API 地址</label><input id="apiUrl" value="https://api.openai.com/v1"><label>API Key</label><input id="apiKey" type="password" placeholder="只保存在本机浏览器"><div class="muted" id="keyHint">留空则使用服务端 config.json 中配置的 Key。</div></details><label>导入牌组</label><div id="selectedDeck" class="chosen">尚未选择</div><details id="deckBox"><summary>选择牌组</summary><input id="deckFilter" placeholder="搜索牌组"><div id="deckTree" class="tree"></div><div class="deckNew"><label class="deckNewLabel">新建位置</label><div id="newDeckParentLabel" class="chosen">顶层（不嵌套）</div><details id="newDeckParentBox"><summary>选择新建位置</summary><input id="newDeckParentFilter" placeholder="搜索牌组"><div id="newDeckParentTree" class="tree"></div></details><div class="deckNewRow"><input id="newDeckName" placeholder="{{copy.newDeckPlaceholder}}"><button id="createDeck" class="secondary">新建</button></div><div id="newDeckPreview" class="deckNewPreview"></div></div></details><button id="loadDecks" class="secondary">刷新牌组</button><button id="deleteDeck" class="danger" disabled>删除当前牌组</button><label>学科包</label><select id="subjectSwitch">{{navHtml}}</select><a href="/">返回学科包列表</a></div><div><label>模型</label><div style="display:flex;gap:8px"><select id="model"></select><button id="loadModels" class="secondary">获取模型</button></div><label>{{cardCount.label}}</label><div style="display:flex;gap:8px"><label style="flex:1;display:block"><span class="muted" style="display:block;font-size:12px">最少</span><input id="minCards" type="number" min="1" max="100" value="{{cardCount.min}}"{{cardCount.minAriaHtml}} style="width:100%"></label><label style="flex:1;display:block"><span class="muted" style="display:block;font-size:12px">最多</span><input id="maxCards" type="number" min="1" max="100" value="{{cardCount.max}}"{{cardCount.maxAriaHtml}} style="width:100%"></label></div><div class="muted">{{cardCount.hint}}</div><label>启用卡片类型</label><div class="cardTypeChecks"><label><input type="checkbox" class="cardType" value="basic" checked>普通卡</label><label><input type="checkbox" class="cardType" value="cloze" checked>填空卡</label><label><input type="checkbox" class="cardType" value="occlusion" checked>图像遮挡卡</label><label><input type="checkbox" class="cardType" value="audio">音频卡</label></div><div class="muted">只生成和预览勾选的类型。</div>
+        <label class="cfDeep"><input type="checkbox" id="deepThinking"> 深度思考（开：慢一些、费 token，难内容更准；关：默认，快且省）</label><details class="subBox" id="autoGroupBox"><summary class="inlineCheck"><input id="autoGroup" type="checkbox" onclick="event.stopPropagation()">自动分层导入（按内容建子牌组）</summary><input id="groupRule" placeholder="分组规则，例如：按教材章 / 节；优先用卡片 group 或 section，其次按来源页段"><label>分组示例图（可选）</label><input id="groupExample" type="file" accept="image/*"><div id="groupExampleRow" class="groupExampleRow" hidden><img id="groupExampleThumb" alt="分组示例图"><span id="groupExampleInfo"></span><button id="groupExampleClear" class="secondary">移除</button></div><div class="muted">先选好上面的父牌组；只在这个位置创建缺少的子牌组（如「父组::第 1 节」），不会把几百张卡堆进同一个牌组。长文档分批沿用同一条规则。</div></details><label>本次额外生成规则（可选）</label><textarea id="extraRules" class="extraRules" placeholder="{{copy.extraRulesPlaceholder}}"></textarea><div class="muted">{{copy.extraRulesHint}}</div><details class="subBox" id="maintBox"><summary>数据维护（备份 / 恢复 / 诊断）</summary><div class="searchRow"><button id="backupAll" class="secondary" type="button">备份全部数据</button><button id="downloadDiagnose" class="secondary" type="button">下载诊断包</button></div><label>从备份恢复（会覆盖学科包与历史记录，恢复前会自动留一份旧数据）</label><input id="restoreFile" type="file" accept=".zip,application/zip"><div class="muted">备份包含学科包、历史记录与本机设置；两种口令、API Key 等密钥不进备份，恢复后重填即可。</div></details></div></div>{{#copy.formatHelp}}<details class="formulaHelp">{{copy.formatHelp}}</details>{{/copy.formatHelp}}<button id="checkAnki" class="secondary">检测 AnkiConnect</button><button id="changeToken" class="secondary">修改访问口令</button><details class="deckNew" id="qrBox"><summary>扫码连接（手机免输口令）</summary><div id="qrImage"></div><div id="qrLink" class="muted"></div><div id="qrRemote" class="muted" style="margin-top:6px"></div><div class="searchRow"><button id="copyQrLink" class="secondary">复制链接</button><button id="copyRemoteLink" class="secondary">复制远程链接</button><button id="refreshQr" class="secondary">刷新地址</button></div><div class="muted">链接里带访问口令，只在自己的设备上扫，不要发到截图、群聊或任何公开地方。</div></details><button id="clearConfig" class="danger">清除本机配置</button></div></details>
+<details class="box" open><summary>教材与资料</summary><div class="inside"><div id="drop" class="drop" tabindex="0"><span id="dropHint">点击这里后按 Ctrl+V 粘贴截图</span><br><span class="muted" id="dropSub">也可以拖拽图片到这里，或使用文件选择</span></div><input id="fileInput" type="file" accept="image/*,.pdf,.doc,.docx,.md,.markdown,.txt,.csv,.json,.html,.htm,.xml,.log" multiple hidden><input id="cameraInput" type="file" accept="image/*" capture="environment" hidden><div id="thumbs" class="thumbs"></div><div id="sourceFiles" aria-live="polite"></div><details id="documentQueue" class="box" hidden open><summary>文档分批任务</summary><div class="inside"><p id="queueInfo"></p><div class="queueControls"><label>起始页／段<input id="queueStart" type="number" min="1" value="1"></label><label>结束页／段<input id="queueEnd" type="number" min="1" value="2"></label></div><label><input id="queueVisual" type="checkbox" checked>保留页面图像（图表、遮挡卡需要）</label><p class="muted">只渲染当前批次。500 页 PDF 可逐批处理；每批都需要确认加载并手动点击生成。刷新后重新选同一文件可恢复已完成批次记录。</p><button id="queueLoad" type="button">确认加载本批</button><button id="queueMark" type="button" disabled>确认本批完成，准备下一批</button><button id="queueClose" type="button" class="secondary">关闭文档</button></div></details><div class="muted">支持图片、PDF、DOCX、MD、TXT 等。PDF 支持长文档分批，单文件 ≤512MB（仍受设备内存限制）；默认每批 2 页。旧 DOC 请另存为 DOCX/PDF。</div><label for="imgQuality">压缩档位（图片与 PDF 页面共用；决定上传给 AI 前被压到多大）</label><select id="imgQuality" aria-label="图片压缩档位"></select><button id="chooseFiles" class="secondary">选择文件</button><button id="takePhoto" class="secondary">拍照</button><button id="generate">{{copy.generateLabel}}</button></div></details>
+<details class="box" id="webBox"><summary>联网调研考点权重与难点（可选）</summary><div class="inside"><div class="muted" id="searchHint"><b>用途</b>：让 AI 知道这部分内容在高中考试里的<b>重要性分布与难点</b>，从而决定哪些点优先覆盖、哪些点拆细、哪些点合并。卡片内容仍以图片为准；只有<b>方法类</b>和调研中<b>特别重要的高频考点</b>才允许补充，且这类卡片会带上「补充」标签便于你核对。建议检索词带上「高考 / 考点 / 难点 / 易错点」。</div><div class="searchRow"><button id="autoResearch">自动调研：读图 → 搜教材目录 → 锁定章节 → 搜考点</button></div><label class="muted" for="searchProvider">检索服务</label><select id="searchProvider" title="检索服务"></select><div class="muted" id="searchProviderHint">选哪家就用哪家的 Key</div><input id="searchUrl" type="text" placeholder="接口地址（只有自建 SearXNG / 自建中转才要填，可留空）" autocomplete="off" spellcheck="false"><input id="jinaUrl" type="text" placeholder="Jina 中转地址（「抓全文」用；手机直连 r.jina.ai 不通时才要填，可留空）" autocomplete="off" spellcheck="false"><details class="subBox" id="jinaHelp"><summary>「抓全文」不通？点开看 Jina 中转怎么弄</summary><div class="muted" style="line-height:1.7">「抓全文」会把请求发到 <b>r.jina.ai</b>（把网页转成纯文本）。如果手机网络到不了它（国内直连常这样），可以自己搭一个「中转」，地址填在上一栏：填一次会记在本机，刷新/重开 App 都不丢；留空 = 继续用默认 r.jina.ai。<br><br><b>做法一：有台能上网的电脑或服务器（Nginx）</b><br>加一条反向代理：<code>location /jina/ { proxy_pass https://r.jina.ai/; }</code><br>然后把 <code>https://你的域名/jina/</code> 填进上一栏。<br><br><b>做法二：Cloudflare Worker（免费，手机浏览器也能配）</b><br>新建一个 Worker，让它把「Worker 地址后面的完整网址」转给 r.jina.ai，例如：<br><code>export default { fetch(req) { const u = new URL(req.url); return fetch('https://r.jina.ai/' + u.pathname.slice(1) + u.search); } }</code><br>部署后把 Worker 地址（如 <code>https://xxx.workers.dev/</code>）填进上一栏。<br><br><b>格式要点</b>：中转只做「前缀拼接」——App 会把「中转地址 + 目标网址」原样发过去，所以中转要把后面的完整网址转给 r.jina.ai，不要改写路径。末尾带不带 / 都可以。</div></details><div class="muted">也可以手动检索：</div><div class="searchRow"><select id="searchChannel" title="检索范围"><option value="zhihu">仅知乎站内</option><option value="global">全网搜索（含教辅站）</option><option value="tavily">Tavily 全网</option></select></div><div class="searchRow"><input id="searchQuery" placeholder="{{copy.searchPlaceholder}}"><button id="searchWeb" class="secondary">联网检索</button></div><div id="searchResults" class="searchResults"></div><div class="searchRow" id="limitsRow" style="flex-wrap:wrap;gap:8px"><span class="muted">字数上限</span><input id="limitSingle" type="number" min="500" max="20000" step="500" style="flex:0 0 auto;width:100px" title="单条结果点「加入调研 / 加入选中」时的截断上限" aria-label="单条结果加入调研的字数上限"><span class="muted">字/条</span><input id="limitTotal" type="number" min="500" max="60000" step="1000" style="flex:0 0 auto;width:110px" title="调研内容注入提示词的总上限（服务端硬上限 60000）" aria-label="考情调研总字数上限"><span class="muted">字/总计</span><button id="resetLimits" class="secondary" style="min-width:auto">恢复默认</button></div><label>考情调研结果（用于判断重点、难度与必要的补充范围）</label><textarea id="reference" class="reference" placeholder="点上方结果的「加入调研」自动填入；也可以直接粘贴你查到的考点分布、难点总结。"></textarea><div class="searchRow"><button id="clearReference" class="secondary">清空调研</button><span id="referenceInfo" class="muted"></span></div></div></details><details id="resultBox" class="box"><summary>{{copy.resultSummary}}</summary><div class="inside"><textarea id="json" placeholder="生成后的 JSON 会显示在这里，也可以手动粘贴 JSON"></textarea><button id="preview" class="secondary">{{copy.previewLabel}}</button><button id="import">导入 Anki</button><label id="groupPreviewRow" class="inlineCheck" hidden style="margin:8px 0 0"><input id="groupPreview" type="checkbox"> 按分组预览（显示每张卡属于哪个子牌组；需先勾「自动分层导入」）</label><button id="syncAnki" class="secondary">同步 AnkiWeb</button><label class="muted" style="display:flex;align-items:center;gap:6px;margin:8px 0 0"><input id="autoSync" type="checkbox" style="flex:0 0 auto;width:auto;min-width:0"> 导入成功后自动同步（手机上点一次导入就完事）</label><div class="searchRow"><button id="downloadApkg" class="secondary" title="导出成 Anki 安装包（含图片与音频）：手机上的 AnkiDroid / AnkiMobile 打开就直接导入，不需要电脑上的 Anki。点它时会让你确认包含哪些类型。">下载 .apkg</button></div><button id="retry" class="secondary" disabled>重试生成</button><div id="cards" class="cards"></div></div></details><div id="status" class="status">正在初始化……</div></main><div id="exportGate" hidden style="position:fixed;inset:0;z-index:1450;background:rgba(10,22,36,.55);display:flex;align-items:center;justify-content:center;padding:16px"><div style="background:#fff;color:#17263d;border-radius:14px;max-width:420px;width:100%;padding:16px 18px"><b id="exportGateTitle" style="font-size:16px">确认导入 Anki</b><div class="muted" style="margin:8px 0 4px;font-size:13px">勾选要包含的卡片类型；没勾的类型整类不参与。之后还可以在卡片列表里按张取消勾选。</div><div style="display:flex;flex-direction:column;gap:6px;margin:8px 0 12px"><label style="display:flex;align-items:center;gap:8px"><input type="checkbox" class="exportType" value="basic" checked>普通卡</label><label style="display:flex;align-items:center;gap:8px"><input type="checkbox" class="exportType" value="cloze" checked>填空卡</label><label style="display:flex;align-items:center;gap:8px"><input type="checkbox" class="exportType" value="occlusion" checked>图像遮挡卡</label><label style="display:flex;align-items:center;gap:8px"><input type="checkbox" class="exportType" value="audio" checked>音频卡</label></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button id="exportGateOk">确认导入</button><button id="exportGateCancel" class="secondary">取消</button></div></div></div><div id="toast" class="toast" role="status" aria-live="polite"></div><button id="historyOpen" title="历史记录（每次生成 / 导入一条）" aria-label="历史记录" style="position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:1300;width:46px;height:46px;padding:0;border:none;border-radius:50%;background:{{subject.themeColor}};color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.28);cursor:pointer"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 12a8.5 8.5 0 1 0 2.8-6.3"/><path d="M3 4.5v5h5"/><path d="M12 7.8V12l3.2 2"/></svg></button><div id="historyBox" hidden style="position:fixed;inset:0;z-index:1400;background:rgba(255,255,255,.985);overflow:auto;padding:16px 14px calc(28px + env(safe-area-inset-bottom,0px))"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 10px"><b style="font-size:16px">历史记录</b><span id="historyInfo" class="muted"></span><span style="flex:1"></span><button id="historyRefresh" class="secondary">刷新</button><button id="historyClose" class="secondary">关闭</button></div><div class="muted" id="historyFile"></div><div id="historyList"></div></div><div id="imagePreview" hidden style="position:fixed;inset:0;z-index:1500;background:rgba(10,22,36,.94);overflow:auto;padding:14px 12px calc(24px + env(safe-area-inset-bottom,0px))"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 8px;color:#fff"><b style="font-size:15px">压缩后预览</b><span id="imagePreviewInfo" style="font-size:12px;opacity:.88"></span><span style="flex:1"></span><button id="imagePreviewClose" class="secondary">关闭</button></div><div id="imagePreviewHint" style="color:#cfe0ee;font-size:12px;margin:0 0 8px">这就是即将上传给 AI 的那张图（按当前压缩档位处理过）。点图可切换「适应屏幕 / 100%」。</div><img id="imagePreviewImg" alt="压缩后的教材图片" style="display:block;margin:0 auto;max-width:100%;background:#fff;border-radius:8px"></div>{{subjectScript}}<script src="{{subject.base}}vendor/qrcode-generator-1.4.4.js"></script><script src="{{subject.base}}app.js?v={{subject.assetVersion}}"></script><script src="{{subject.base}}workflow.js?v=1"></script></body></html>
